@@ -320,6 +320,65 @@ body {
   color: rgba(255,255,255,0.8);
 }
 
+/* Upgrade Intro Card */
+.upgrade-intro {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.ui-badge {
+  display: inline-block;
+  font-size: 11px;
+  color: #6dd5fa;
+  background: rgba(109,213,250,0.1);
+  border-radius: 4px;
+  padding: 3px 10px;
+  margin-bottom: 10px;
+}
+.ui-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.ui-compare { display: flex; gap: 12px; }
+.ui-col {
+  flex: 1;
+  border-radius: 12px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+}
+.ui-col.pro {
+  background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(196,77,255,0.1));
+  border: 1px solid rgba(196,77,255,0.35);
+}
+.ui-col-h {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.ui-col.free .ui-col-h { color: rgba(255,255,255,0.5); }
+.ui-col.pro .ui-col-h { color: #ff6b9d; }
+.ui-col ul { list-style: none; }
+.ui-col li {
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.7);
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 6px;
+}
+.ui-col li::before {
+  content: "\\2713";
+  position: absolute;
+  left: 0;
+  color: #6dd5fa;
+}
+.ui-col.pro li::before { color: #c44dff; }
+
 /* Paid Section - Locked */
 .paid-section {
   position: relative;
@@ -518,6 +577,30 @@ body {
       <p id="insightText">--</p>
     </div>
 
+    <div class="upgrade-intro">
+      <div class="ui-badge">你正在看的是「快速版」</div>
+      <div class="ui-title">再答 18 题（共 30 题）解锁「深度版」</div>
+      <div class="ui-compare">
+        <div class="ui-col free">
+          <div class="ui-col-h">快速版 · 免费</div>
+          <ul>
+            <li>12 题 · 2 分钟</li>
+            <li>综合匹配度 + 六维雷达</li>
+            <li>一句话结论</li>
+          </ul>
+        </div>
+        <div class="ui-col pro">
+          <div class="ui-col-h">深度版 · ¥19.9</div>
+          <ul>
+            <li>再加 18 题 · 更细颗粒度</li>
+            <li>冲突高发场景预警</li>
+            <li>给 A / 给 B 各 3 条沟通建议</li>
+            <li>30 天关系走势预测</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <div class="paid-section">
       <div class="paid-content">
         <div class="paid-block">
@@ -539,10 +622,10 @@ body {
       </div>
       <div class="lock-overlay">
         <div class="lock-icon">&#128274;</div>
-        <h3>解锁完整分析报告</h3>
-        <p>含冲突预警 + 双方建议 + 30天走势</p>
-        <button class="btn-unlock" onclick="alert('此处接入微信支付 / 跳转付费页')">
-          ¥ 19.9 解锁
+        <h3>深度版：再答 18 题解锁</h3>
+        <p>30 题完整版 · 含冲突预警 + 双方建议 + 30天走势</p>
+        <button class="btn-unlock" onclick="startDeepQuiz()">
+          ¥ 19.9 解锁深度版
           <small>已有 2,847 对解锁</small>
         </button>
       </div>
@@ -757,59 +840,93 @@ function computeResult() {
   const mbtiA = (a[0]===0?'E':'I') + (a[1]===0?'S':'N') + (a[2]===0?'T':'F') + (a[3]===0?'J':'P');
   const mbtiB = (b[0]===0?'E':'I') + (b[1]===0?'S':'N') + (b[2]===0?'T':'F') + (b[3]===0?'J':'P');
 
-  // Attachment (questions 4-6): more A choices = anxious, more B = avoidant/secure
-  const attachScoreA = a[4] + a[5] + a[6]; // 0=anxious leaning, 1=secure/avoidant
-  const attachScoreB = b[4] + b[5] + b[6];
-  const attachA = attachScoreA <= 1 ? '焦虑型' : attachScoreA >= 3 ? '安全型' : '混合型';
-  const attachB = attachScoreB <= 1 ? '焦虑型' : attachScoreB >= 3 ? '安全型' : '混合型';
+  // Attachment (questions 4-6): count of "anxious" picks (chose a=0)
+  const anxCountA = (a[4]===0?1:0)+(a[5]===0?1:0)+(a[6]===0?1:0);
+  const anxCountB = (b[4]===0?1:0)+(b[5]===0?1:0)+(b[6]===0?1:0);
+  const attachA = anxCountA >= 3 ? '焦虑型' : anxCountA === 2 ? '偏焦虑' : anxCountA === 1 ? '偏安全' : '安全型';
+  const attachB = anxCountB >= 3 ? '焦虑型' : anxCountB === 2 ? '偏焦虑' : anxCountB === 1 ? '偏安全' : '安全型';
 
-  // Love Language: majority from questions 7-11
-  const llA = loveLanguage(a, 7);
-  const llB = loveLanguage(b, 7);
+  // Love Language (questions 7-11)
+  const llA = loveLanguage(a);
+  const llB = loveLanguage(b);
 
-  // Six-dimension scores for radar
-  const dimsA = [
-    a[0]===0 ? 85 : 35, // 外向度
-    a[1]===0 ? 35 : 80, // 直觉度
-    a[2]===0 ? 30 : 85, // 感受度
-    a[3]===0 ? 30 : 80, // 随性度
-    attachScoreA <= 1 ? 80 : 40, // 亲密需求
-    (llA.score) // 爱的表达力
-  ];
-  const dimsB = [
-    b[0]===0 ? 85 : 35,
-    b[1]===0 ? 35 : 80,
-    b[2]===0 ? 30 : 85,
-    b[3]===0 ? 30 : 80,
-    attachScoreB <= 1 ? 80 : 40,
-    (llB.score)
-  ];
-
-  // Match calculation
-  let matchSum = 0;
-  for (let i = 0; i < 6; i++) {
-    matchSum += 100 - Math.abs(dimsA[i] - dimsB[i]);
+  // ===== Six continuous dimensions, cross-wired from multiple answers =====
+  function dims(x) {
+    const clamp = v => Math.max(12, Math.min(94, Math.round(v)));
+    // 外向度
+    let ex = 50 + (x[0]===0?22:-22) + (x[9]===0?14:-14) + (x[7]===1?-6:6);
+    // 直觉力
+    let ni = 50 + (x[1]===1?28:-28) + (x[3]===1?10:-10);
+    // 感受力
+    let fe = 50 + (x[2]===1?26:-26) + (x[7]===0?8:-8) + (x[10]===0?6:-6);
+    // 灵活度
+    let fl = 50 + (x[3]===1?26:-26) + (x[5]===1?10:-10) + (x[11]===1?6:-6);
+    // 亲密需求（焦虑程度映射）
+    let in_ = 30 + ((x[4]===0?1:0)+(x[5]===0?1:0)+(x[6]===0?1:0))*20;
+    // 表达力（爱的语言多样性 + 主动信号）
+    const spread = new Set([x[7],x[8],x[9],x[10],x[11]]).size;
+    let ex_ = 40 + spread*12 + (x[8]===1?6:-6);
+    return [clamp(ex), clamp(ni), clamp(fe), clamp(fl), clamp(in_), clamp(ex_)];
   }
-  let matchPercent = Math.round(matchSum / 6);
-  matchPercent = Math.max(40, Math.min(96, matchPercent));
+  const dimsA = dims(a), dimsB = dims(b);
+  const axisNames = ['外向度','直觉力','感受力','灵活度','亲密需求','表达力'];
 
-  // Type name
+  // ===== Per-axis compatibility (energy axes reward complementarity, value axes reward similarity) =====
+  function axisCompat(i, da, db) {
+    const diff = Math.abs(da - db);
+    if (i === 0 || i === 3) return 100 - Math.max(0, diff - 25) * 1.1; // 外向/灵活：适度差异更好
+    if (i === 4) return 100 - diff * 0.95;   // 亲密需求：越接近越好（焦虑×回避最伤）
+    if (i === 1 || i === 2) return 100 - diff * 0.78; // 直觉/感受：相似加分
+    return 100 - diff * 0.6;                 // 表达力：影响较小
+  }
+  const weights = [0.15, 0.18, 0.2, 0.14, 0.23, 0.10];
+  let matchSum = 0, compats = [];
+  for (let i = 0; i < 6; i++) {
+    const c = Math.max(20, Math.min(99, axisCompat(i, dimsA[i], dimsB[i])));
+    compats.push(Math.round(c));
+    matchSum += c * weights[i];
+  }
+  let matchPercent = Math.round(matchSum);
+  matchPercent = Math.max(42, Math.min(97, matchPercent));
+
+  // ===== Type name (expanded) =====
   const diffCount = [mbtiA[0]!==mbtiB[0], mbtiA[1]!==mbtiB[1], mbtiA[2]!==mbtiB[2], mbtiA[3]!==mbtiB[3]].filter(Boolean).length;
   let typeName;
-  if (diffCount <= 1) typeName = '灵魂共鸣型 — 你们天然同频';
+  if (diffCount === 0) typeName = '镜像同频型 — 几乎是一个模子';
+  else if (diffCount === 1) typeName = '微调共鸣型 — 大方向一致，小处互补';
   else if (diffCount === 2) typeName = '互补成长型 — 差异带来吸引力';
-  else if (diffCount === 3) typeName = '磨合挑战型 — 需要主动沟通';
-  else typeName = '镜像反差型 — 像照镜子又像照反镜';
+  else if (diffCount === 3) typeName = '磨合挑战型 — 需要刻意沟通';
+  else typeName = '反差张力型 — 像照镜子又像照反镜';
 
-  // Insight
-  let insight;
-  if (attachA === '焦虑型' && attachB === '安全型') insight = '你们的核心课题是"节奏差"——TA不是不爱你，是表达频率和你期待的不一样。找到双方都舒服的回应节奏，比时刻黏在一起重要。';
-  else if (attachA === '焦虑型' && attachB === '焦虑型') insight = '你们都是"对方没秒回就会想多"的类型，好处是互相理解，风险是一旦都忙就容易冷战升级。建议约定一个"我很忙但没忘你"的暗号。';
-  else if (attachA === '安全型' && attachB === '安全型') insight = '你们的依恋模式高度一致，吵架不容易升级、独处不会慌。最大的风险反而是"太独立，忘了主动靠近"。';
-  else if (attachA === '焦虑型' && attachB === '混合型') insight = '你们对"亲密距离"的需求不一样——你需要确定的回应，TA需要灵活的空间。这不是不爱，是电池大小不同。';
-  else insight = '你们的组合属于"表面平淡、越挖越深"型——没有戏剧性的心动，但长期相处会越处越舒服。';
+  // ===== Auto-pick most similar / most different axis =====
+  let maxDiff = -1, minDiff = 999, mostDiffAxis = '', mostSimAxis = '';
+  for (let i = 0; i < 6; i++) {
+    const d = Math.abs(dimsA[i]-dimsB[i]);
+    if (d > maxDiff) { maxDiff = d; mostDiffAxis = axisNames[i]; }
+    if (d < minDiff) { minDiff = d; mostSimAxis = axisNames[i]; }
+  }
+  const loveSame = llA.name === llB.name;
 
-  // Render
+  // ===== Composed insight (multi-part, injects real numbers) =====
+  const attachKey = [attachA, attachB].sort().join('|');
+  let core;
+  if (attachKey === '安全型|焦虑型' || attachKey === '偏安全|焦虑型') {
+    core = '你们是典型的"追—逃"结构：' + (anxCountA>anxCountB?'你':'TA') + '更需要确定的回应，' + (anxCountA>anxCountB?'TA':'你') + '需要独处回血。这不是不爱，是亲密电池的大小不同。';
+  } else if (attachKey === '焦虑型|焦虑型') {
+    core = '两个人都容易"没被秒回就想多"，好处是彼此懂，风险是一吵架就升级成冷战。你们最需要的是一个"我很忙但没忘你"的约定暗号。';
+  } else if (attachKey === '安全型|安全型' || attachKey === '安全型|偏安全' || attachKey === '偏安全|偏安全') {
+    core = '你们的依恋模式都很稳，吵架不容易失控、独处也不会慌。真正的隐患是"太独立，忘了主动靠近"——需要有人定期制造一点黏。';
+  } else {
+    core = '你们对亲密距离的需求比较接近，日常相处不容易出现"一个追一个逃"的拉扯，这是很多情侣羡慕不来的底子。';
+  }
+  const lovePart = loveSame
+    ? '有意思的是，你们表达爱的方式高度一致（都是"' + llA.name + '"），付出很容易被对方接收到，很少出现"我给的你没感到"的错位。'
+    : '要注意爱的语言错位：你最想要"' + llA.name + '"，TA 却习惯用"' + llB.name + '"付出——不是不够爱，是频道没对上，长期容易双方都觉得委屈。';
+  const axisPart = '你们最合拍的是「' + mostSimAxis + '」，差异最大的是「' + mostDiffAxis + '」（相差 ' + maxDiff + ' 分），' + (maxDiff > 45 ? '这个维度上要多一分"求同存异"的耐心。' : '整体差异可控，磨合成本不高。');
+
+  const insight = core + ' ' + lovePart + ' ' + axisPart;
+
+  // ===== Render =====
   document.getElementById('pairNames').textContent = mbtiA + ' × ' + mbtiB;
   document.getElementById('matchScore').textContent = matchPercent + '%';
   document.getElementById('matchType').textContent = typeName;
@@ -818,17 +935,16 @@ function computeResult() {
   // Dimension bars
   const dimArea = document.getElementById('dimensionsArea');
   const dimLabels = [
-    { name: '社交能量', a: (a[0]===0?'外向 E':'内向 I'), b: (b[0]===0?'外向 E':'内向 I') },
-    { name: '依恋模式', a: attachA, b: attachB },
-    { name: '爱的语言', a: llA.name, b: llB.name }
+    { name: '社交能量', a: (a[0]===0?'外向 E':'内向 I'), b: (b[0]===0?'外向 E':'内向 I'), compat: compats[0] },
+    { name: '依恋模式', a: attachA, b: attachB, compat: compats[4] },
+    { name: '爱的语言', a: llA.name, b: llB.name, compat: loveSame ? compats[5] : Math.max(35, compats[5]-15) }
   ];
   let html = '';
-  dimLabels.forEach((d, i) => {
-    const score = i === 0 ? (100 - Math.abs(dimsA[0]-dimsB[0])) : i === 1 ? (100 - Math.abs(dimsA[4]-dimsB[4])) : (100 - Math.abs(dimsA[5]-dimsB[5]));
+  dimLabels.forEach((d) => {
     html += `<div class="dim-item">
-      <div class="dim-header"><span class="dim-name">${d.name}</span><span class="dim-score">${Math.round(score)}%</span></div>
-      <div class="dim-bar"><div class="dim-fill a" style="width:${d.a?score:0}%;"></div></div>
-      <div class="dim-bar" style="margin-top:4px"><div class="dim-fill b" style="width:${score}%"></div></div>
+      <div class="dim-header"><span class="dim-name">${d.name}</span><span class="dim-score">${d.compat}%</span></div>
+      <div class="dim-bar"><div class="dim-fill a" style="width:${d.compat}%"></div></div>
+      <div class="dim-bar" style="margin-top:4px"><div class="dim-fill b" style="width:${Math.max(20,d.compat - (Math.abs(dimsA[0]-dimsB[0])/3))}%"></div></div>
       <div class="dim-tags"><span class="dim-tag a">${d.a}</span><span class="dim-tag b">${d.b}</span></div>
     </div>`;
   });
@@ -838,17 +954,28 @@ function computeResult() {
   drawRadar(dimsA, dimsB);
 }
 
-function loveLanguage(answers, startIdx) {
-  // Simple: count which type gets more picks
-  const mapping = ['肯定言词', '精心时刻', '接受礼物', '服务行动', '身体接触'];
-  const picks = {};
-  for (let i = startIdx; i < startIdx + 5; i++) {
-    const val = answers[i];
-    const key = val === 0 ? mapping[(i - startIdx) * 2 % 5] : mapping[((i - startIdx) * 2 + 1) % 5];
-    picks[key] = (picks[key] || 0) + 1;
+function loveLanguage(x) {
+  // 5 love languages mapped from questions 7-11 (a/b each maps to one)
+  const pairs = [
+    ['肯定言词','精心时刻'],   // q7
+    ['接受礼物','服务行动'],   // q8
+    ['身体接触','肯定言词'],   // q9
+    ['精心时刻','身体接触'],   // q10
+    ['接受礼物','服务行动']    // q11
+  ];
+  const tally = {};
+  for (let i = 0; i < 5; i++) {
+    const pick = x[7+i] === 0 ? pairs[i][0] : pairs[i][1];
+    tally[pick] = (tally[pick]||0) + 1;
   }
-  let max = Object.entries(picks).sort((a,b)=>b[1]-a[1])[0];
-  return { name: max[0], score: 55 + max[1] * 10 };
+  const sorted = Object.entries(tally).sort((p,q)=>q[1]-p[1]);
+  const top = sorted[0][0];
+  const strength = sorted[0][1];
+  return { name: top, score: 45 + strength*12 };
+}
+
+function startDeepQuiz() {
+  alert('深度版（再加 18 题）支付入口\n\n正式版这里会：\n1. 拉起微信支付 ¥19.9\n2. 支付成功 → 解锁 18 道进阶题\n3. 答完出完整深度报告\n\n现在这是占位演示。');
 }
 
 // ===== RADAR CHART =====
