@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>你和TA的性格匹配度测试</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(160deg, #1a0a2e 0%, #16213e 40%, #0f3460 100%);
+  color: #f0e6ff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Landing Page */
+.landing { text-align: center; animation: fadeUp 0.8s ease; }
+.landing h1 {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ff6b9d, #c44dff, #6dd5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.landing .subtitle {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+.landing .badge {
+  display: inline-block;
+  background: rgba(196, 77, 255, 0.15);
+  border: 1px solid rgba(196, 77, 255, 0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px;
+  color: #c44dff;
+  margin-bottom: 32px;
+}
+.btn-start {
+  background: linear-gradient(135deg, #ff6b9d, #c44dff);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 48px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(196, 77, 255, 0.3);
+  transition: all 0.3s ease;
+}
+.btn-start:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(196, 77, 255, 0.4); }
+.landing .dots {
+  margin-top: 32px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.landing .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+}
+.landing .dot.active { background: #c44dff; }
+
+/* Person Selection */
+.person-select { text-align: center; animation: fadeUp 0.5s ease; }
+.person-select h2 { font-size: 20px; margin-bottom: 24px; color: #e8d5ff; }
+.person-cards { display: flex; gap: 16px; justify-content: center; }
+.person-card {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 24px 20px;
+  width: 150px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.person-card:hover, .person-card.selected {
+  border-color: #c44dff;
+  background: rgba(196, 77, 255, 0.1);
+  transform: translateY(-4px);
+}
+.person-card .icon { font-size: 36px; margin-bottom: 12px; }
+.person-card .label { font-size: 15px; font-weight: 600; color: #e8d5ff; }
+
+/* Transition Screen (A → B) */
+.transition-card {
+  text-align: center;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(196,77,255,0.2);
+  border-radius: 20px;
+  padding: 32px 24px;
+  animation: fadeUp 0.5s ease;
+}
+.transition-card .big-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+.transition-card h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #ff6b9d, #c44dff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.transition-card p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.transition-card .progress-hint {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 20px;
+}
+
+/* Question Flow */
+.question-panel {
+  width: 100%;
+  animation: fadeUp 0.4s ease;
+}
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin-bottom: 24px;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b9d, #c44dff);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.q-counter {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+}
+.q-dimension {
+  display: inline-block;
+  font-size: 11px;
+  color: #6dd5fa;
+  background: rgba(109, 213, 250, 0.1);
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin-bottom: 16px;
+}
+.q-text {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 28px;
+  color: #fff;
+}
+.options { display: flex; flex-direction: column; gap: 12px; }
+.option {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+}
+.option:hover { border-color: rgba(196,77,255,0.5); background: rgba(196,77,255,0.05); }
+.option.selected { border-color: #c44dff; background: rgba(196,77,255,0.15); color: #fff; }
+
+/* Loading / Computing */
+.computing {
+  text-align: center;
+  animation: fadeUp 0.5s ease;
+}
+.computing .spinner {
+  width: 60px; height: 60px;
+  border: 3px solid rgba(196,77,255,0.2);
+  border-top-color: #c44dff;
+  border-radius: 50%;
+  margin: 0 auto 24px;
+  animation: spin 1s linear infinite;
+}
+.computing h3 { font-size: 18px; margin-bottom: 8px; }
+.computing p { font-size: 14px; color: rgba(255,255,255,0.5); }
+
+/* Result Page */
+.result-panel {
+  width: 100%;
+  animation: fadeUp 0.6s ease;
+}
+.result-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.result-header .pair-names {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 8px;
+}
+.match-score {
+  font-size: 64px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff6b9d, #c44dff, #6dd5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.match-label {
+  font-size: 15px;
+  color: #e8d5ff;
+  font-weight: 500;
+}
+.match-type {
+  display: inline-block;
+  margin-top: 12px;
+  background: rgba(255, 107, 157, 0.12);
+  border: 1px solid rgba(255, 107, 157, 0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: #ff6b9d;
+}
+
+/* Radar Chart */
+.radar-section {
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.radar-section h4 {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 12px;
+}
+#radarCanvas {
+  width: 280px;
+  height: 280px;
+}
+
+/* Dimension Bars */
+.dimensions {
+  margin-bottom: 20px;
+}
+.dim-item {
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.dim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.dim-name { font-size: 14px; font-weight: 600; }
+.dim-score { font-size: 14px; color: #6dd5fa; font-weight: 700; }
+.dim-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.dim-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+.dim-fill.a { background: linear-gradient(90deg, #ff6b9d, #ff9a76); }
+.dim-fill.b { background: linear-gradient(90deg, #6dd5fa, #a78bfa); }
+.dim-tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.dim-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.5);
+}
+.dim-tag.a { color: #ff6b9d; background: rgba(255,107,157,0.1); }
+.dim-tag.b { color: #6dd5fa; background: rgba(109,213,250,0.1); }
+
+/* Insight Card */
+.insight-card {
+  background: linear-gradient(135deg, rgba(255,107,157,0.08), rgba(196,77,255,0.08));
+  border: 1px solid rgba(196,77,255,0.15);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.insight-card h4 {
+  font-size: 14px;
+  color: #c44dff;
+  margin-bottom: 8px;
+}
+.insight-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.8);
+}
+
+/* Paid Section - Locked */
+.paid-section {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.paid-content {
+  padding: 20px;
+  filter: blur(8px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+.paid-content .paid-block {
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.paid-content .paid-block h5 {
+  font-size: 14px;
+  color: #ff6b9d;
+  margin-bottom: 8px;
+}
+.paid-content .paid-block p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.7);
+}
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(26,10,46,0.3) 0%, rgba(26,10,46,0.95) 70%);
+}
+.lock-overlay .lock-icon { font-size: 32px; margin-bottom: 12px; }
+.lock-overlay h3 { font-size: 16px; margin-bottom: 6px; color: #fff; }
+.lock-overlay p { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+.btn-unlock {
+  background: linear-gradient(135deg, #ff6b9d, #c44dff);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 36px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(196,77,255,0.3);
+  transition: all 0.3s ease;
+}
+.btn-unlock:hover { transform: translateY(-2px); }
+.btn-unlock small { display: block; font-size: 11px; font-weight: 400; opacity: 0.8; margin-top: 2px; }
+
+/* Share hint */
+.share-hint {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Transition between screens */
+.screen { display: none; width: 100%; }
+.screen.active { display: flex; flex-direction: column; align-items: center; }
+
+/* Responsive */
+@media (max-width: 380px) {
+  .match-score { font-size: 52px; }
+  .q-text { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Screen: Landing -->
+<div class="screen active" id="screen-landing">
+  <div class="landing">
+    <div class="badge">MBTI + 依恋类型 + 爱的语言</div>
+    <h1>你们合不合适<br>3分钟就知道</h1>
+    <p class="subtitle">基于三个维度交叉分析<br>给出你们的专属匹配报告</p>
+    <button class="btn-start" onclick="goToPersonSelect()">开始测试</button>
+    <div class="dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Screen: Person Select -->
+<div class="screen" id="screen-person">
+  <div class="person-select">
+    <h2>先填写谁的信息？</h2>
+    <div class="person-cards">
+      <div class="person-card selected" onclick="startQuiz(0)">
+        <div class="icon">&#128105;</div>
+        <div class="label">我 / A</div>
+      </div>
+      <div class="person-card" onclick="startQuiz(1)">
+        <div class="icon">&#128104;</div>
+        <div class="label">TA / B</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Screen: Quiz -->
+<div class="screen" id="screen-quiz">
+  <div class="question-panel">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="q-counter" id="qCounter"></div>
+    <div class="q-dimension" id="qDim"></div>
+    <div class="q-text" id="qText"></div>
+    <div class="options" id="qOptions"></div>
+  </div>
+</div>
+
+<!-- Screen: Transition (A done, prompt for B) -->
+<div class="screen" id="screen-transition">
+  <div class="transition-card">
+    <div class="big-icon">&#10024;</div>
+    <h2>你这边答完了</h2>
+    <p id="transitionText">TA 那半还空着。<br>挑一个方式补齐 ↓</p>
+
+    <button class="btn-start" style="width: 100%; margin-bottom: 12px;" onclick="copyInviteLink()" id="btnInvite">
+      &#128279; 生成邀请链接发给 TA
+    </button>
+    <div id="inviteLinkBox" style="display:none; background: rgba(196,77,255,0.08); border: 1px solid rgba(196,77,255,0.25); border-radius: 10px; padding: 12px; margin-bottom: 14px; text-align: left;">
+      <div style="font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 6px;">链接已复制到剪贴板 · 去微信粘贴发给 TA</div>
+      <div id="inviteLinkText" style="font-size: 11px; color: #c44dff; word-break: break-all; line-height: 1.4; opacity: 0.7;"></div>
+    </div>
+
+    <button class="btn-start" style="width: 100%; margin-bottom: 12px; background: rgba(255,255,255,0.08); color: #fff; box-shadow: none; border: 1px solid rgba(255,255,255,0.15); font-size: 14px; padding: 12px 24px;" onclick="startPersonB()">
+      &#128101; TA 就在身边，接着答
+    </button>
+
+    <button class="btn-start" style="width: 100%; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); box-shadow: none; border: 1px dashed rgba(255,255,255,0.15); font-size: 13px; padding: 10px 24px;" onclick="startPersonBQuick()">
+      单人试玩 · 我替 TA 猜一版
+    </button>
+  </div>
+</div>
+
+<!-- Screen: Invite Welcome (TA opens shared link) -->
+<div class="screen" id="screen-invite-welcome">
+  <div class="transition-card">
+    <div class="big-icon">&#128140;</div>
+    <h2>有人想跟你测测</h2>
+    <p id="inviteWelcomeText"><b>你的 TA</b> 已经答完 12 题，<br>现在就差你这边了。</p>
+    <div class="progress-hint">大约 2 分钟 · 答完立刻出你们的匹配报告</div>
+    <button class="btn-start" style="width: 100%;" onclick="acceptInvite()">开始我的答题</button>
+  </div>
+</div>
+
+<!-- Screen: Computing -->
+<div class="screen" id="screen-computing">
+  <div class="computing">
+    <div class="spinner"></div>
+    <h3>正在分析你们的性格密码...</h3>
+    <p>交叉比对三个维度数据</p>
+  </div>
+</div>
+
+<!-- Screen: Result -->
+<div class="screen" id="screen-result">
+  <div class="result-panel">
+    <div class="result-header">
+      <div class="pair-names" id="pairNames">A × B</div>
+      <div class="match-score" id="matchScore">--</div>
+      <div class="match-label" id="matchLabel">综合匹配度</div>
+      <div class="match-type" id="matchType">计算中...</div>
+    </div>
+
+    <div class="radar-section">
+      <h4>六维性格雷达对比</h4>
+      <canvas id="radarCanvas" width="560" height="560"></canvas>
+    </div>
+
+    <div class="dimensions" id="dimensionsArea"></div>
+
+    <div class="insight-card">
+      <h4>一句话结论</h4>
+      <p id="insightText">--</p>
+    </div>
+
+    <div class="paid-section">
+      <div class="paid-content">
+        <div class="paid-block">
+          <h5>冲突高发预警</h5>
+          <p>第2-3个月，你们最可能因为"回复消息的节奏差异"产生第一次冷战。焦虑型的A会在等待中反复确认，而回避型的B需要独处恢复能量...</p>
+        </div>
+        <div class="paid-block">
+          <h5>给A的3条沟通建议</h5>
+          <p>1. 当TA说"让我想想"时，真的给24小时而不是追问；2. 用具体请求代替情绪表达...</p>
+        </div>
+        <div class="paid-block">
+          <h5>给B的3条沟通建议</h5>
+          <p>1. 每天主动发一条消息，哪怕只是一个表情包；2. 独处时告诉TA"我需要充电，不是不想你"...</p>
+        </div>
+        <div class="paid-block">
+          <h5>30天关系走势</h5>
+          <p>第1周甜蜜期，第2周开始出现小摩擦，第3周如果不主动沟通会有第一次"冷战风险点"，第4周...</p>
+        </div>
+      </div>
+      <div class="lock-overlay">
+        <div class="lock-icon">&#128274;</div>
+        <h3>解锁完整分析报告</h3>
+        <p>含冲突预警 + 双方建议 + 30天走势</p>
+        <button class="btn-unlock" onclick="alert('此处接入微信支付 / 跳转付费页')">
+          ¥ 19.9 解锁
+          <small>已有 2,847 对解锁</small>
+        </button>
+      </div>
+    </div>
+
+    <div class="share-hint">
+      截图分享到群聊，让朋友们也测一测<br>
+      长按保存图片
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ===== DATA =====
+const questions = [
+  // MBTI - E/I
+  { dim: 'MBTI · 社交能量', text: '周末终于休息了，你更想——', a: '约朋友出去吃饭、逛街或参加聚会', b: '一个人待着，看书、刷剧或发呆' },
+  // MBTI - S/N
+  { dim: 'MBTI · 信息偏好', text: '听朋友讲一件事时，你更关注——', a: '具体发生了什么、时间地点细节', b: '这件事意味着什么、背后的可能性' },
+  // MBTI - T/F
+  { dim: 'MBTI · 决策方式', text: '做重要决定（换工作/搬家）时，你更依赖——', a: '理性分析利弊得失', b: '这件事对我和身边人的感受' },
+  // MBTI - J/P
+  { dim: 'MBTI · 生活节奏', text: '旅行前你会——', a: '提前查好攻略、订好酒店、规划每天行程', b: '订张机票就出发，到了再说' },
+  // Attachment 1
+  { dim: '依恋类型 · 安全感', text: 'TA 两小时没回消息，你内心第一反应是——', a: '有点不安，忍不住再看一眼手机或想发第二条', b: '正常，应该在忙，晚点自然会回' },
+  // Attachment 2
+  { dim: '依恋类型 · 冲突处理', text: '两人吵完架，你倾向于——', a: '必须马上聊开，憋着难受', b: '各自冷静一下，改天再谈' },
+  // Attachment 3
+  { dim: '依恋类型 · 空间需求', text: 'TA说"我今天想一个人待着"，你的感受是——', a: '心里不舒服，觉得被推开了', b: '好的，各做各的事，晚点再说' },
+  // Love Language 1
+  { dim: '爱的语言 · 核心需求', text: '什么事最让你感到"被爱"？', a: 'TA认真听我说话、给予肯定和鼓励', b: 'TA花时间陪我、注意力在我身上' },
+  // Love Language 2
+  { dim: '爱的语言 · 被爱信号', text: '以下哪个最让你心动？', a: '突然收到TA寄的/做的小礼物', b: 'TA主动帮我做事（做饭/跑腿/收拾）' },
+  // Love Language 3
+  { dim: '爱的语言 · 理想时刻', text: '最幸福的瞬间是——', a: '牵手、拥抱、靠在一起', b: 'TA说了一句"你辛苦了，我都知道"' },
+  // Love Language 4
+  { dim: '爱的语言 · 理想约会', text: '最理想的二人约会——', a: '一起去没去过的地方探险', b: '窝在家里各干各的但知道对方在旁边' },
+  // Love Language 5
+  { dim: '爱的语言 · 日常关心', text: 'TA每天做什么最让你温暖？', a: '睡前互道晚安、视频聊几分钟', b: '记住你说想吃的东西然后买回来' }
+];
+
+// ===== STATE =====
+let currentPerson = 0; // 0=A, 1=B
+let currentQ = 0;
+let answers = { A: [], B: [] };
+
+// ===== NAVIGATION =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToPersonSelect() { showScreen('screen-person'); }
+
+function startQuiz(person) {
+  currentPerson = person;
+  currentQ = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const total = questions.length;
+  const key = currentPerson === 0 ? 'A' : 'B';
+  const isLast = currentQ === total - 1;
+
+  document.getElementById('progressFill').style.width = ((currentQ + 1) / total * 100) + '%';
+  document.getElementById('qCounter').innerHTML =
+    '<span style="color:' + (currentPerson === 0 ? '#ff6b9d' : '#6dd5fa') + ';font-weight:600;">' +
+    (currentPerson === 0 ? '&#128105; 你的答案' : '&#128104; TA 的答案') +
+    '</span> · 第 ' + (currentQ + 1) + ' / ' + total + ' 题' +
+    (isLast ? ' <span style="color:#c44dff;">（最后一题，马上就好）</span>' : '');
+  document.getElementById('qDim').textContent = q.dim;
+  document.getElementById('qText').textContent = q.text;
+
+  const optArea = document.getElementById('qOptions');
+  optArea.innerHTML = '';
+  const optA = document.createElement('div');
+  optA.className = 'option';
+  optA.textContent = q.a;
+  optA.onclick = () => selectAnswer(0);
+  const optB = document.createElement('div');
+  optB.className = 'option';
+  optB.textContent = q.b;
+  optB.onclick = () => selectAnswer(1);
+  optArea.appendChild(optA);
+  optArea.appendChild(optB);
+}
+
+function selectAnswer(val) {
+  const key = currentPerson === 0 ? 'A' : 'B';
+  answers[key].push(val);
+  currentQ++;
+
+  if (currentQ < questions.length) {
+    renderQuestion();
+  } else {
+    if (currentPerson === 0) {
+      // A 全部答完 → 展示过渡页，不要静默切到 B
+      showScreen('screen-transition');
+    } else {
+      // B 全部答完 → 进入计算
+      showScreen('screen-computing');
+      setTimeout(() => { computeResult(); showScreen('screen-result'); }, 2000);
+    }
+  }
+}
+
+function startPersonB() {
+  currentPerson = 1;
+  currentQ = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function startPersonBQuick() {
+  // 单人模式：替 TA 猜——默认全部选和 A 相反的方向（制造差异）
+  // 但如果 A 已经在某个维度上极端倾向，保留一个"跟 A 一样"的选项让结果不过于低分
+  currentPerson = 1;
+  currentQ = 0;
+  answers.B = answers.A.map((v, i) => {
+    // MBTI 前 4 题：反转制造差异；依恋 3 题：一半保留；爱的语言 5 题：随机
+    if (i < 4) return 1 - v;
+    if (i < 7) return i % 2 === 0 ? v : 1 - v;
+    return (i + v) % 2;
+  });
+  // 跳过 B 的答题流程，直接进计算
+  showScreen('screen-computing');
+  setTimeout(() => { computeResult(); showScreen('screen-result'); }, 1800);
+}
+
+// ===== INVITE LINK =====
+function encodeAnswers(arr) {
+  // 用简单 base64（本地 file:// 也能用），兼容中文字符安全
+  return btoa(arr.join(''));
+}
+function decodeAnswers(str) {
+  try { return atob(str).split('').map(Number); } catch(e) { return null; }
+}
+
+function generateInviteLink() {
+  // 保留当前 URL 的路径部分，追加 ?invite=
+  const base = location.href.split('?')[0].split('#')[0];
+  const data = encodeAnswers(answers.A);
+  return base + '?invite=' + data;
+}
+
+function copyInviteLink() {
+  const link = generateInviteLink();
+  const box = document.getElementById('inviteLinkBox');
+  const txt = document.getElementById('inviteLinkText');
+  txt.textContent = link;
+  box.style.display = 'block';
+
+  // 复制到剪贴板
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(link).then(() => {
+      document.getElementById('btnInvite').innerHTML = '&#10003; 已复制，去微信粘贴发给 TA';
+    }).catch(() => fallbackCopy(link));
+  } else {
+    fallbackCopy(link);
+  }
+}
+
+function fallbackCopy(link) {
+  const ta = document.createElement('textarea');
+  ta.value = link;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); 
+    document.getElementById('btnInvite').innerHTML = '&#10003; 已复制，去微信粘贴发给 TA';
+  } catch(e) {
+    // 复制失败就让用户长按选中
+    document.getElementById('btnInvite').innerHTML = '&#128279; 点一下长按选中链接';
+  }
+  document.body.removeChild(ta);
+}
+
+function acceptInvite() {
+  currentPerson = 1;
+  currentQ = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function checkInviteOnLoad() {
+  const params = new URLSearchParams(location.search);
+  const inv = params.get('invite');
+  if (!inv) return false;
+  const decoded = decodeAnswers(inv);
+  if (!decoded || decoded.length !== 12) return false;
+  answers.A = decoded;
+  // 直接跳到邀请欢迎页，覆盖默认的 landing
+  showScreen('screen-invite-welcome');
+  return true;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  checkInviteOnLoad();
+});
+
+// ===== CALCULATION =====
+function computeResult() {
+  const a = answers.A, b = answers.B;
+
+  // MBTI extraction (questions 0-3)
+  const mbtiA = (a[0]===0?'E':'I') + (a[1]===0?'S':'N') + (a[2]===0?'T':'F') + (a[3]===0?'J':'P');
+  const mbtiB = (b[0]===0?'E':'I') + (b[1]===0?'S':'N') + (b[2]===0?'T':'F') + (b[3]===0?'J':'P');
+
+  // Attachment (questions 4-6): more A choices = anxious, more B = avoidant/secure
+  const attachScoreA = a[4] + a[5] + a[6]; // 0=anxious leaning, 1=secure/avoidant
+  const attachScoreB = b[4] + b[5] + b[6];
+  const attachA = attachScoreA <= 1 ? '焦虑型' : attachScoreA >= 3 ? '安全型' : '混合型';
+  const attachB = attachScoreB <= 1 ? '焦虑型' : attachScoreB >= 3 ? '安全型' : '混合型';
+
+  // Love Language: majority from questions 7-11
+  const llA = loveLanguage(a, 7);
+  const llB = loveLanguage(b, 7);
+
+  // Six-dimension scores for radar
+  const dimsA = [
+    a[0]===0 ? 85 : 35, // 外向度
+    a[1]===0 ? 35 : 80, // 直觉度
+    a[2]===0 ? 30 : 85, // 感受度
+    a[3]===0 ? 30 : 80, // 随性度
+    attachScoreA <= 1 ? 80 : 40, // 亲密需求
+    (llA.score) // 爱的表达力
+  ];
+  const dimsB = [
+    b[0]===0 ? 85 : 35,
+    b[1]===0 ? 35 : 80,
+    b[2]===0 ? 30 : 85,
+    b[3]===0 ? 30 : 80,
+    attachScoreB <= 1 ? 80 : 40,
+    (llB.score)
+  ];
+
+  // Match calculation
+  let matchSum = 0;
+  for (let i = 0; i < 6; i++) {
+    matchSum += 100 - Math.abs(dimsA[i] - dimsB[i]);
+  }
+  let matchPercent = Math.round(matchSum / 6);
+  matchPercent = Math.max(40, Math.min(96, matchPercent));
+
+  // Type name
+  const diffCount = [mbtiA[0]!==mbtiB[0], mbtiA[1]!==mbtiB[1], mbtiA[2]!==mbtiB[2], mbtiA[3]!==mbtiB[3]].filter(Boolean).length;
+  let typeName;
+  if (diffCount <= 1) typeName = '灵魂共鸣型 — 你们天然同频';
+  else if (diffCount === 2) typeName = '互补成长型 — 差异带来吸引力';
+  else if (diffCount === 3) typeName = '磨合挑战型 — 需要主动沟通';
+  else typeName = '镜像反差型 — 像照镜子又像照反镜';
+
+  // Insight
+  let insight;
+  if (attachA === '焦虑型' && attachB === '安全型') insight = '你们的核心课题是"节奏差"——TA不是不爱你，是表达频率和你期待的不一样。找到双方都舒服的回应节奏，比时刻黏在一起重要。';
+  else if (attachA === '焦虑型' && attachB === '焦虑型') insight = '你们都是"对方没秒回就会想多"的类型，好处是互相理解，风险是一旦都忙就容易冷战升级。建议约定一个"我很忙但没忘你"的暗号。';
+  else if (attachA === '安全型' && attachB === '安全型') insight = '你们的依恋模式高度一致，吵架不容易升级、独处不会慌。最大的风险反而是"太独立，忘了主动靠近"。';
+  else if (attachA === '焦虑型' && attachB === '混合型') insight = '你们对"亲密距离"的需求不一样——你需要确定的回应，TA需要灵活的空间。这不是不爱，是电池大小不同。';
+  else insight = '你们的组合属于"表面平淡、越挖越深"型——没有戏剧性的心动，但长期相处会越处越舒服。';
+
+  // Render
+  document.getElementById('pairNames').textContent = mbtiA + ' × ' + mbtiB;
+  document.getElementById('matchScore').textContent = matchPercent + '%';
+  document.getElementById('matchType').textContent = typeName;
+  document.getElementById('insightText').textContent = insight;
+
+  // Dimension bars
+  const dimArea = document.getElementById('dimensionsArea');
+  const dimLabels = [
+    { name: '社交能量', a: (a[0]===0?'外向 E':'内向 I'), b: (b[0]===0?'外向 E':'内向 I') },
+    { name: '依恋模式', a: attachA, b: attachB },
+    { name: '爱的语言', a: llA.name, b: llB.name }
+  ];
+  let html = '';
+  dimLabels.forEach((d, i) => {
+    const score = i === 0 ? (100 - Math.abs(dimsA[0]-dimsB[0])) : i === 1 ? (100 - Math.abs(dimsA[4]-dimsB[4])) : (100 - Math.abs(dimsA[5]-dimsB[5]));
+    html += `<div class="dim-item">
+      <div class="dim-header"><span class="dim-name">${d.name}</span><span class="dim-score">${Math.round(score)}%</span></div>
+      <div class="dim-bar"><div class="dim-fill a" style="width:${d.a?score:0}%;"></div></div>
+      <div class="dim-bar" style="margin-top:4px"><div class="dim-fill b" style="width:${score}%"></div></div>
+      <div class="dim-tags"><span class="dim-tag a">${d.a}</span><span class="dim-tag b">${d.b}</span></div>
+    </div>`;
+  });
+  dimArea.innerHTML = html;
+
+  // Radar chart
+  drawRadar(dimsA, dimsB);
+}
+
+function loveLanguage(answers, startIdx) {
+  // Simple: count which type gets more picks
+  const mapping = ['肯定言词', '精心时刻', '接受礼物', '服务行动', '身体接触'];
+  const picks = {};
+  for (let i = startIdx; i < startIdx + 5; i++) {
+    const val = answers[i];
+    const key = val === 0 ? mapping[(i - startIdx) * 2 % 5] : mapping[((i - startIdx) * 2 + 1) % 5];
+    picks[key] = (picks[key] || 0) + 1;
+  }
+  let max = Object.entries(picks).sort((a,b)=>b[1]-a[1])[0];
+  return { name: max[0], score: 55 + max[1] * 10 };
+}
+
+// ===== RADAR CHART =====
+function drawRadar(dimsA, dimsB) {
+  const canvas = document.getElementById('radarCanvas');
+  const ctx = canvas.getContext('2d');
+  const cx = 280, cy = 280, r = 200;
+  const n = 6;
+  const labels = ['外向度', '直觉力', '感受力', '灵活度', '亲密需求', '表达力'];
+
+  ctx.clearRect(0, 0, 560, 560);
+
+  // Grid rings
+  for (let ring = 1; ring <= 4; ring++) {
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= n; i++) {
+      const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+      const x = cx + Math.cos(angle) * r * ring / 4;
+      const y = cy + Math.sin(angle) * r * ring / 4;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  // Spokes
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r);
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.stroke();
+  }
+
+  // Data A (pink)
+  ctx.beginPath();
+  for (let i = 0; i <= n; i++) {
+    const idx = i % n;
+    const angle = (Math.PI * 2 / n) * idx - Math.PI / 2;
+    const val = dimsA[idx] / 100;
+    const x = cx + Math.cos(angle) * r * val;
+    const y = cy + Math.sin(angle) * r * val;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255, 107, 157, 0.15)';
+  ctx.fill();
+  ctx.strokeStyle = '#ff6b9d';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Data B (cyan)
+  ctx.beginPath();
+  for (let i = 0; i <= n; i++) {
+    const idx = i % n;
+    const angle = (Math.PI * 2 / n) * idx - Math.PI / 2;
+    const val = dimsB[idx] / 100;
+    const x = cx + Math.cos(angle) * r * val;
+    const y = cy + Math.sin(angle) * r * val;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(109, 213, 250, 0.12)';
+  ctx.fill();
+  ctx.strokeStyle = '#6dd5fa';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Dots A
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const val = dimsA[i] / 100;
+    const x = cx + Math.cos(angle) * r * val;
+    const y = cy + Math.sin(angle) * r * val;
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff6b9d';
+    ctx.fill();
+  }
+
+  // Dots B
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const val = dimsB[i] / 100;
+    const x = cx + Math.cos(angle) * r * val;
+    const y = cy + Math.sin(angle) * r * val;
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#6dd5fa';
+    ctx.fill();
+  }
+
+  // Labels
+  ctx.font = '13px PingFang SC, Microsoft YaHei, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const x = cx + Math.cos(angle) * (r + 30);
+    const y = cy + Math.sin(angle) * (r + 30);
+    ctx.fillText(labels[i], x, y);
+  }
+}
+</script>
+</body>
+</html>
