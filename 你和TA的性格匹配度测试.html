@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)file:///D:/[A03]Qoder%E5%8D%83%E9%97%AE%E8%B5%84%E6%96%99/index.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>你和TA的性格匹配度测试</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(160deg, #1a0a2e 0%, #16213e 40%, #0f3460 100%);
+  color: #f0e6ff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Landing Page */
+.landing { text-align: center; animation: fadeUp 0.8s ease; }
+.landing h1 {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ff6b9d, #c44dff, #6dd5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.landing .subtitle {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+.landing .badge {
+  display: inline-block;
+  background: rgba(196, 77, 255, 0.15);
+  border: 1px solid rgba(196, 77, 255, 0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px;
+  color: #c44dff;
+  margin-bottom: 32px;
+}
+.btn-start {
+  background: linear-gradient(135deg, #ff6b9d, #c44dff);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 48px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(196, 77, 255, 0.3);
+  transition: all 0.3s ease;
+}
+.btn-start:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(196, 77, 255, 0.4); }
+.landing .dots {
+  margin-top: 32px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.landing .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+}
+.landing .dot.active { background: #c44dff; }
+
+/* Person Selection */
+.person-select { text-align: center; animation: fadeUp 0.5s ease; }
+.person-select h2 { font-size: 20px; margin-bottom: 24px; color: #e8d5ff; }
+.person-cards { display: flex; gap: 16px; justify-content: center; }
+.person-card {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 24px 20px;
+  width: 150px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.person-card:hover, .person-card.selected {
+  border-color: #c44dff;
+  background: rgba(196, 77, 255, 0.1);
+  transform: translateY(-4px);
+}
+.person-card .icon { font-size: 36px; margin-bottom: 12px; }
+.person-card .label { font-size: 15px; font-weight: 600; color: #e8d5ff; }
+
+/* Transition Screen (A → B) */
+.transition-card {
+  text-align: center;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(196,77,255,0.2);
+  border-radius: 20px;
+  padding: 32px 24px;
+  animation: fadeUp 0.5s ease;
+}
+.transition-card .big-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+.transition-card h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #ff6b9d, #c44dff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.transition-card p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.transition-card .progress-hint {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 20px;
+}
+
+/* Question Flow */
+.question-panel {
+  width: 100%;
+  animation: fadeUp 0.4s ease;
+}
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin-bottom: 24px;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b9d, #c44dff);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.q-counter {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+}
+.q-dimension {
+  display: inline-block;
+  font-size: 11px;
+  color: #6dd5fa;
+  background: rgba(109, 213, 250, 0.1);
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin-bottom: 16px;
+}
+.q-text {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 28px;
+  color: #fff;
+}
+.options { display: flex; flex-direction: column; gap: 12px; }
+.option {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+}
+.option:hover { border-color: rgba(196,77,255,0.5); background: rgba(196,77,255,0.05); }
+.option.selected { border-color: #c44dff; background: rgba(196,77,255,0.15); color: #fff; }
+
+/* Loading / Computing */
+.computing {
+  text-align: center;
+  animation: fadeUp 0.5s ease;
+}
+.computing .spinner {
+  width: 60px; height: 60px;
+  border: 3px solid rgba(196,77,255,0.2);
+  border-top-color: #c44dff;
+  border-radius: 50%;
+  margin: 0 auto 24px;
+  animation: spin 1s linear infinite;
+}
+.computing h3 { font-size: 18px; margin-bottom: 8px; }
+.computing p { font-size: 14px; color: rgba(255,255,255,0.5); }
+
+/* Result Page */
+.result-panel {
+  width: 100%;
+  animation: fadeUp 0.6s ease;
+}
+.result-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.result-header .pair-names {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 8px;
+}
+.match-score {
+  font-size: 64px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff6b9d, #c44dff, #6dd5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.match-label {
+  font-size: 15px;
+  color: #e8d5ff;
+  font-weight: 500;
+}
+.match-type {
+  display: inline-block;
+  margin-top: 12px;
+  background: rgba(255, 107, 157, 0.12);
+  border: 1px solid rgba(255, 107, 157, 0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: #ff6b9d;
+}
+
+/* Radar Chart */
+.radar-section {
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.radar-section h4 {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 12px;
+}
+#radarCanvas {
+  width: 280px;
+  height: 280px;
+}
+
+/* Dimension Bars */
+.dimensions {
+  margin-bottom: 20px;
+}
+.dim-item {
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.dim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.dim-name { font-size: 14px; font-weight: 600; }
+.dim-score { font-size: 14px; color: #6dd5fa; font-weight: 700; }
+.dim-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.dim-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+.dim-fill.a { background: linear-gradient(90deg, #ff6b9d, #ff9a76); }
+.dim-fill.b { background: linear-gradient(90deg, #6dd5fa, #a78bfa); }
+.dim-tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.dim-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.5);
+}
+.dim-tag.a { color: #ff6b9d; background: rgba(255,107,157,0.1); }
+.dim-tag.b { color: #6dd5fa; background: rgba(109,213,250,0.1); }
+
+/* Insight Card */
+.insight-card {
+  background: linear-gradient(135deg, rgba(255,107,157,0.08), rgba(196,77,255,0.08));
+  border: 1px solid rgba(196,77,255,0.15);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.insight-card h4 {
+  font-size: 14px;
+  color: #c44dff;
+  margin-bottom: 8px;
+}
+.insight-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.8);
+}
+
+/* Upgrade Intro Card */
+.upgrade-intro {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.ui-badge {
+  display: inline-block;
+  font-size: 11px;
+  color: #6dd5fa;
+  background: rgba(109,213,250,0.1);
+  border-radius: 4px;
+  padding: 3px 10px;
+  margin-bottom: 10px;
+}
+.ui-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.ui-compare { display: flex; gap: 12px; }
+.ui-col {
+  flex: 1;
+  border-radius: 12px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+}
+.ui-col.pro {
+  background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(196,77,255,0.1));
+  border: 1px solid rgba(196,77,255,0.35);
+}
+.ui-col-h {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.ui-col.free .ui-col-h { color: rgba(255,255,255,0.5); }
+.ui-col.pro .ui-col-h { color: #ff6b9d; }
+.ui-col ul { list-style: none; }
+.ui-col li {
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.7);
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 6px;
+}
+.ui-col li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  color: #6dd5fa;
+}
+.ui-col.pro li::before { color: #c44dff; }
+
+/* Paid Section - Locked */
+.paid-section {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  min-height: 340px;
+}
+.paid-content {
+  padding: 20px;
+  filter: blur(8px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+.paid-content .paid-block {
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.paid-content .paid-block h5 {
+  font-size: 14px;
+  color: #ff6b9d;
+  margin-bottom: 8px;
+}
+.paid-content .paid-block p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.7);
+}
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(26,10,46,0.3) 0%, rgba(26,10,46,0.95) 70%);
+}
+.lock-overlay .lock-icon { font-size: 32px; margin-bottom: 12px; }
+.lock-overlay h3 { font-size: 16px; margin-bottom: 6px; color: #fff; }
+.lock-overlay p { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+.btn-unlock {
+  background: linear-gradient(135deg, #ff6b9d, #c44dff);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 36px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(196,77,255,0.3);
+  transition: all 0.3s ease;
+}
+.btn-unlock:hover { transform: translateY(-2px); }
+.btn-unlock small { display: block; font-size: 11px; font-weight: 400; opacity: 0.8; margin-top: 2px; }
+
+/* Share hint */
+.share-hint {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* Deep Report (unlocked) */
+.paid-content.unlocked {
+  filter: none;
+  opacity: 1;
+  pointer-events: auto;
+}
+.deep-block {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.deep-block h5 {
+  font-size: 14px;
+  color: #ff6b9d;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.deep-block p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.82);
+}
+.deep-block .advice-item {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.82);
+  margin-bottom: 6px;
+  padding-left: 4px;
+}
+.trend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.trend-week {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  width: 42px;
+  flex-shrink: 0;
+}
+.trend-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.trend-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #ff6b9d, #c44dff);
+}
+.trend-note { font-size: 12px; color: rgba(255,255,255,0.55); width: 60px; text-align: right; flex-shrink:0; }
+.deep-done {
+  text-align: center;
+  font-size: 12px;
+  color: #6dd5fa;
+  margin-top: 4px;
+}
+
+/* Payment Modal */
+.pay-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 100;
+  align-items: flex-end;
+  justify-content: center;
+}
+.pay-modal.show { display: flex; animation: fadeUp 0.25s ease; }
+.pay-card {
+  width: 100%;
+  max-width: 420px;
+  background: #f5f6f7;
+  color: #1a1a1a;
+  border-radius: 16px 16px 0 0;
+  padding: 24px 20px 28px;
+  position: relative;
+}
+.pay-close {
+  position: absolute;
+  top: 16px; right: 18px;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  line-height: 1;
+}
+.pay-title { text-align: center; font-size: 15px; color: #666; margin-bottom: 6px; }
+.pay-amount { text-align: center; font-size: 34px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+.pay-item { text-align: center; font-size: 13px; color: #888; margin-bottom: 18px; }
+.pay-divider { height: 1px; background: #e2e2e2; margin: 0 -20px 8px; }
+.pay-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 4px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+.pay-row.disabled { opacity: 0.5; cursor: default; }
+.pay-icon {
+  width: 26px; height: 26px;
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; margin-right: 12px;
+}
+.pay-icon.wx { background: #07c160; color: #fff; }
+.pay-icon.qq { background: #12b7f5; color: #fff; }
+.pay-label { flex: 1; font-size: 15px; color: #1a1a1a; }
+.pay-check { color: #07c160; font-size: 18px; }
+.pay-tag { font-size: 12px; color: #bbb; }
+.pay-btn {
+  width: 100%;
+  margin-top: 20px;
+  background: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.pay-safe { text-align: center; font-size: 11px; color: #aaa; margin-top: 12px; }
+
+/* Pay Processing */
+.pay-processing {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 120;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.pay-processing.show { display: flex; }
+.pp-spinner {
+  width: 44px; height: 44px;
+  border: 3px solid rgba(255,255,255,0.2);
+  border-top-color: #07c160;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+.pp-text { color: #fff; font-size: 14px; }
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Transition between screens */
+.screen { display: none; width: 100%; }
+.screen.active { display: flex; flex-direction: column; align-items: center; }
+
+/* Responsive */
+@media (max-width: 380px) {
+  .match-score { font-size: 52px; }
+  .q-text { font-size: 16px; }
+}
+</style>
+<style wxt-shadow-root-document-styles="3i51lvv4cys">@property --tw-translate-x{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-y{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-z{syntax:"*";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:"*";inherits:false}@property --tw-rotate-y{syntax:"*";inherits:false}@property --tw-rotate-z{syntax:"*";inherits:false}@property --tw-skew-x{syntax:"*";inherits:false}@property --tw-skew-y{syntax:"*";inherits:false}@property --tw-space-y-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-divide-x-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-divide-y-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-leading{syntax:"*";inherits:false}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-tracking{syntax:"*";inherits:false}@property --tw-ordinal{syntax:"*";inherits:false}@property --tw-slashed-zero{syntax:"*";inherits:false}@property --tw-numeric-figure{syntax:"*";inherits:false}@property --tw-numeric-spacing{syntax:"*";inherits:false}@property --tw-numeric-fraction{syntax:"*";inherits:false}@property --tw-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:"*";inherits:false}@property --tw-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:"*";inherits:false}@property --tw-inset-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:"*";inherits:false}@property --tw-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:"*";inherits:false}@property --tw-inset-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:"*";inherits:false}@property --tw-ring-offset-width{syntax:"<length>";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:"*";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-blur{syntax:"*";inherits:false}@property --tw-brightness{syntax:"*";inherits:false}@property --tw-contrast{syntax:"*";inherits:false}@property --tw-grayscale{syntax:"*";inherits:false}@property --tw-hue-rotate{syntax:"*";inherits:false}@property --tw-invert{syntax:"*";inherits:false}@property --tw-opacity{syntax:"*";inherits:false}@property --tw-saturate{syntax:"*";inherits:false}@property --tw-sepia{syntax:"*";inherits:false}@property --tw-drop-shadow{syntax:"*";inherits:false}@property --tw-drop-shadow-color{syntax:"*";inherits:false}@property --tw-drop-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:"*";inherits:false}@property --tw-backdrop-blur{syntax:"*";inherits:false}@property --tw-backdrop-brightness{syntax:"*";inherits:false}@property --tw-backdrop-contrast{syntax:"*";inherits:false}@property --tw-backdrop-grayscale{syntax:"*";inherits:false}@property --tw-backdrop-hue-rotate{syntax:"*";inherits:false}@property --tw-backdrop-invert{syntax:"*";inherits:false}@property --tw-backdrop-opacity{syntax:"*";inherits:false}@property --tw-backdrop-saturate{syntax:"*";inherits:false}@property --tw-backdrop-sepia{syntax:"*";inherits:false}@property --tw-duration{syntax:"*";inherits:false}@property --tw-ease{syntax:"*";inherits:false}</style></head>
+<body>
+<div class="container">
+
+<!-- Screen: Landing -->
+<div class="screen" id="screen-landing">
+  <div class="landing">
+    <div class="badge">MBTI + 依恋类型 + 爱的语言</div>
+    <h1>你们合不合适<br>3分钟就知道</h1>
+    <p class="subtitle">基于三个维度交叉分析<br>给出你们的专属匹配报告</p>
+    <button class="btn-start" onclick="goToPersonSelect()">开始测试</button>
+    <div class="dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Screen: Person Select -->
+<div class="screen" id="screen-person">
+  <div class="person-select">
+    <h2>先填写谁的信息？</h2>
+    <div class="person-cards">
+      <div class="person-card selected" onclick="startQuiz(0)">
+        <div class="icon">👩</div>
+        <div class="label">我 / A</div>
+      </div>
+      <div class="person-card" onclick="startQuiz(1)">
+        <div class="icon">👨</div>
+        <div class="label">TA / B</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Screen: Quiz -->
+<div class="screen" id="screen-quiz">
+  <div class="question-panel">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 100%;"></div></div>
+    <div class="q-counter" id="qCounter"><span style="color:#ff6b9d;font-weight:600;">👩 你的答案</span> · 第 12 / 12 题 <span style="color:#c44dff;">（最后一题，马上就好）</span></div>
+    <div class="q-dimension" id="qDim">爱的语言 · 日常关心</div>
+    <div class="q-text" id="qText">TA每天做什么最让你温暖？</div>
+    <div class="options" id="qOptions"><div class="option">睡前互道晚安、视频聊几分钟</div><div class="option">记住你说想吃的东西然后买回来</div></div>
+  </div>
+</div>
+
+<!-- Screen: Transition (A done, prompt for B) -->
+<div class="screen" id="screen-transition">
+  <div class="transition-card">
+    <div class="big-icon">✨</div>
+    <h2>你这边答完了</h2>
+    <p id="transitionText">TA 那半还空着。<br>挑一个方式补齐 ↓</p>
+
+    <button class="btn-start" style="width: 100%; margin-bottom: 12px;" onclick="copyInviteLink()" id="btnInvite">✓ 已复制，去微信粘贴发给 TA</button>
+    <div id="inviteLinkBox" style="display: block; background: rgba(196, 77, 255, 0.08); border: 1px solid rgba(196, 77, 255, 0.25); border-radius: 10px; padding: 12px; margin-bottom: 14px; text-align: left;">
+      <div style="font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 6px;">链接已复制到剪贴板 · 去微信粘贴发给 TA</div>
+      <div id="inviteLinkText" style="font-size: 11px; color: #c44dff; word-break: break-all; line-height: 1.4; opacity: 0.7;">file:///D:/[A03]Qoder%E5%8D%83%E9%97%AE%E8%B5%84%E6%96%99/index.html?invite=MDAwMDAwMDAwMDAw</div>
+    </div>
+
+    <button class="btn-start" style="width: 100%; margin-bottom: 12px; background: rgba(255,255,255,0.08); color: #fff; box-shadow: none; border: 1px solid rgba(255,255,255,0.15); font-size: 14px; padding: 12px 24px;" onclick="startPersonB()">
+      👥 TA 就在身边，接着答
+    </button>
+
+    <button class="btn-start" style="width: 100%; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); box-shadow: none; border: 1px dashed rgba(255,255,255,0.15); font-size: 13px; padding: 10px 24px;" onclick="startPersonBQuick()">
+      单人试玩 · 我替 TA 猜一版
+    </button>
+  </div>
+</div>
+
+<!-- Screen: Invite Welcome (TA opens shared link) -->
+<div class="screen" id="screen-invite-welcome">
+  <div class="transition-card">
+    <div class="big-icon">💌</div>
+    <h2>有人想跟你测测</h2>
+    <p id="inviteWelcomeText"><b>你的 TA</b> 已经答完 12 题，<br>现在就差你这边了。</p>
+    <div class="progress-hint">大约 2 分钟 · 答完立刻出你们的匹配报告</div>
+    <button class="btn-start" style="width: 100%;" onclick="acceptInvite()">开始我的答题</button>
+  </div>
+</div>
+
+<!-- Screen: Computing -->
+<div class="screen" id="screen-computing">
+  <div class="computing">
+    <div class="spinner"></div>
+    <h3>正在生成你们的深度报告...</h3>
+    <p>交叉比对三个维度数据</p>
+  </div>
+</div>
+
+<!-- Screen: Result -->
+<div class="screen active" id="screen-result">
+  <div class="result-panel">
+    <div class="result-header">
+      <div class="pair-names" id="pairNames">ESTJ × INFP</div>
+      <div class="match-score" id="matchScore">61%</div>
+      <div class="match-label" id="matchLabel">综合匹配度</div>
+      <div class="match-type" id="matchType">反差张力型 — 像照镜子又像照反镜</div>
+    </div>
+
+    <div class="radar-section">
+      <h4>六维性格雷达对比</h4>
+      <canvas id="radarCanvas" width="560" height="560"></canvas>
+    </div>
+
+    <div class="dimensions" id="dimensionsArea"><div class="dim-item">
+      <div class="dim-header"><span class="dim-name">社交能量</span><span class="dim-score">39%</span></div>
+      <div class="dim-bar"><div class="dim-fill a" style="width:39%"></div></div>
+      <div class="dim-bar" style="margin-top:4px"><div class="dim-fill b" style="width:20%"></div></div>
+      <div class="dim-tags"><span class="dim-tag a">外向 E</span><span class="dim-tag b">内向 I</span></div>
+    </div><div class="dim-item">
+      <div class="dim-header"><span class="dim-name">依恋模式</span><span class="dim-score">81%</span></div>
+      <div class="dim-bar"><div class="dim-fill a" style="width:81%"></div></div>
+      <div class="dim-bar" style="margin-top:4px"><div class="dim-fill b" style="width:54.33333333333333%"></div></div>
+      <div class="dim-tags"><span class="dim-tag a">焦虑型</span><span class="dim-tag b">偏焦虑</span></div>
+    </div><div class="dim-item">
+      <div class="dim-header"><span class="dim-name">爱的语言</span><span class="dim-score">78%</span></div>
+      <div class="dim-bar"><div class="dim-fill a" style="width:78%"></div></div>
+      <div class="dim-bar" style="margin-top:4px"><div class="dim-fill b" style="width:51.33333333333333%"></div></div>
+      <div class="dim-tags"><span class="dim-tag a">接受礼物</span><span class="dim-tag b">精心时刻</span></div>
+    </div></div>
+
+    <div class="insight-card">
+      <h4>一句话结论</h4>
+      <p id="insightText">你们对亲密距离的需求比较接近，日常相处不容易出现"一个追一个逃"的拉扯，这是很多情侣羡慕不来的底子。 要注意爱的语言错位：你最想要"接受礼物"，TA 却习惯用"精心时刻"付出——不是不够爱，是频道没对上，长期容易双方都觉得委屈。 你们最合拍的是「表达力」，差异最大的是「外向度」（相差 80 分），这个维度上要多一分"求同存异"的耐心。</p>
+    </div>
+
+    <div class="upgrade-intro">
+      <div class="ui-badge">你正在看的是「快速版」</div>
+      <div class="ui-title">再答 18 题（共 30 题）解锁「深度版」</div>
+      <div class="ui-compare">
+        <div class="ui-col free">
+          <div class="ui-col-h">快速版 · 免费</div>
+          <ul>
+            <li>12 题 · 2 分钟</li>
+            <li>综合匹配度 + 六维雷达</li>
+            <li>一句话结论</li>
+          </ul>
+        </div>
+        <div class="ui-col pro">
+          <div class="ui-col-h">深度版 · ¥19.9</div>
+          <ul>
+            <li>再加 18 题 · 更细颗粒度</li>
+            <li>冲突高发场景预警</li>
+            <li>给 A / 给 B 各 3 条沟通建议</li>
+            <li>30 天关系走势预测</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="paid-section">
+      <div class="paid-content unlocked" id="paidContent">
+    <div class="deep-block">
+      <h5>⚠️ 冲突高发预警</h5>
+      <p>第1-2个月，你们最可能因为「周末怎么过的安排分歧」爆发第一次冷战。你会在等待里反复确认、越想越不安，而TA需要退回去独处回血——一个越追越急，一个越被追越想逃，这是把小摩擦拖成大问题的经典回路。</p>
+    </div>
+    <div class="deep-block">
+      <h5>👩 给你的 3 条沟通建议</h5>
+      <div class="advice-item">1. 当TA说"我想静静"时，那是 TA 的充电方式，不是不爱你——把追问换成一句"好，你需要我的时候我在"。</div><div class="advice-item">2. 别用"翻旧账/连环消息"表达不安，直接说需求：把"你怎么又不理我"改成"今晚能陪我聊十分钟吗"。</div><div class="advice-item">3. 给自己找一个不依赖 TA 的情绪出口（朋友/运动/爱好），你的不安会明显下降。</div>
+    </div>
+    <div class="deep-block">
+      <h5>👨 给 TA 的 3 条沟通建议</h5>
+      <div class="advice-item">1. 每天主动给一个"信号"，哪怕只是一个表情包，你要的不是时长，是"被记得"的确定感。</div><div class="advice-item">2. 需要独处时先报备再消失："我今晚想自己待会儿，明早找你"，给个归期，TA 就不会慌。</div><div class="advice-item">3. 你情绪上来时，先接住感受再讲道理，一句"我知道你难受"比十句解释有用。</div>
+    </div>
+    <div class="deep-block">
+      <h5>📈 30 天关系走势</h5>
+      <div class="trend-row"><span class="trend-week">第1周</span><div class="trend-bar"><div class="trend-fill" style="width:69%"></div></div><span class="trend-note">甜蜜高峰</span></div><div class="trend-row"><span class="trend-week">第2周</span><div class="trend-bar"><div class="trend-fill" style="width:59%"></div></div><span class="trend-note">平稳</span></div><div class="trend-row"><span class="trend-week">第3周</span><div class="trend-bar"><div class="trend-fill" style="width:62%"></div></div><span class="trend-note">磨合</span></div><div class="trend-row"><span class="trend-week">第4周</span><div class="trend-bar"><div class="trend-fill" style="width:67%"></div></div><span class="trend-note">回暖上升</span></div>
+      <p style="margin-top:10px">你们整体是"高开→小回调→稳步回暖"的健康曲线，只要第3周那次沟通考验不回避，第4周会进入更踏实的舒适期。</p>
+    </div>
+    <div class="deep-done">✓ 深度版报告已生成 · 30 题完整版</div>
+  </div>
+      <div class="lock-overlay" id="lockOverlay" style="display: none;">
+        <div class="lock-icon">🔒</div>
+        <h3>深度版：再答 18 题解锁</h3>
+        <p>30 题完整版 · 含冲突预警 + 双方建议 + 30天走势</p>
+        <button class="btn-unlock" onclick="startDeepQuiz()">
+          ¥ 19.9 解锁深度版
+          <small>已有 2,847 对解锁</small>
+        </button>
+      </div>
+    </div>
+
+    <div class="share-hint">
+      截图分享到群聊，让朋友们也测一测<br>
+      长按保存图片
+    </div>
+  </div>
+</div>
+
+<!-- Screen: Deep Quiz (18 questions) -->
+<div class="screen" id="screen-deep">
+  <div class="question-panel">
+    <div class="progress-bar"><div class="progress-fill" id="deepProgress" style="width: 100%;"></div></div>
+    <div class="q-counter" id="deepCounter"><span style="color:#6dd5fa;font-weight:600;">👨 TA · 深度题</span> · 第 18 / 18 题 <span style="color:#c44dff;">（最后一题，马上出报告）</span></div>
+    <div class="q-dimension" id="deepDim">深度 · 未来规划</div>
+    <div class="q-text" id="deepText">关于两人的未来——</div>
+    <div class="options" id="deepOptions"><div class="option">希望早点定下来（同居/结婚）</div><div class="option">走一步看一步，不想被绑定</div></div>
+  </div>
+</div>
+
+<!-- Screen: Deep Transition (A finished -> B's turn) -->
+<div class="screen" id="screen-deep-transition">
+  <div class="transition-card">
+    <div class="big-icon">✅</div>
+    <h2>你的 18 道答完了</h2>
+    <p>接下来是 <b>TA 的 18 道</b>深度题。<br>TA 在身边就把手机递过去；<br>不在身边，可以让 TA 稍后用同一个链接答完。</p>
+    <button class="btn-start" style="width: 100%;" onclick="startDeepB()">继续 · 开始 TA 的 18 题 →</button>
+  </div>
+</div>
+
+<!-- Payment Modal (mock 微信支付) -->
+<div class="pay-modal" id="payModal">
+  <div class="pay-card">
+    <div class="pay-close" onclick="closePayModal()">×</div>
+    <div class="pay-title">确认支付</div>
+    <div class="pay-amount">¥ 19.90</div>
+    <div class="pay-item">性格配对 · 深度版报告（30 题完整版）</div>
+    <div class="pay-divider"></div>
+    <div class="pay-row" onclick="confirmPay()">
+      <span class="pay-icon wx">🔍</span>
+      <span class="pay-label">微信支付</span>
+      <span class="pay-check">✓</span>
+    </div>
+    <div class="pay-row disabled">
+      <span class="pay-icon qq">🐧</span>
+      <span class="pay-label">QQ 钱包</span>
+      <span class="pay-tag">暂不可用</span>
+    </div>
+    <button class="pay-btn" onclick="confirmPay()">立即支付 ¥19.90</button>
+    <div class="pay-safe">演示环境 · 不会产生真实扣款</div>
+  </div>
+</div>
+
+<!-- Pay Processing overlay -->
+<div class="pay-processing" id="payProcessing">
+  <div class="pp-spinner"></div>
+  <div class="pp-text" id="ppText">支付成功 ✓</div>
+</div>
+
+</div>
+
+<script>
+// ===== DATA =====
+const questions = [
+  // MBTI - E/I
+  { dim: 'MBTI · 社交能量', text: '周末终于休息了，你更想——', a: '约朋友出去吃饭、逛街或参加聚会', b: '一个人待着，看书、刷剧或发呆' },
+  // MBTI - S/N
+  { dim: 'MBTI · 信息偏好', text: '听朋友讲一件事时，你更关注——', a: '具体发生了什么、时间地点细节', b: '这件事意味着什么、背后的可能性' },
+  // MBTI - T/F
+  { dim: 'MBTI · 决策方式', text: '做重要决定（换工作/搬家）时，你更依赖——', a: '理性分析利弊得失', b: '这件事对我和身边人的感受' },
+  // MBTI - J/P
+  { dim: 'MBTI · 生活节奏', text: '旅行前你会——', a: '提前查好攻略、订好酒店、规划每天行程', b: '订张机票就出发，到了再说' },
+  // Attachment 1
+  { dim: '依恋类型 · 安全感', text: 'TA 两小时没回消息，你内心第一反应是——', a: '有点不安，忍不住再看一眼手机或想发第二条', b: '正常，应该在忙，晚点自然会回' },
+  // Attachment 2
+  { dim: '依恋类型 · 冲突处理', text: '两人吵完架，你倾向于——', a: '必须马上聊开，憋着难受', b: '各自冷静一下，改天再谈' },
+  // Attachment 3
+  { dim: '依恋类型 · 空间需求', text: 'TA说"我今天想一个人待着"，你的感受是——', a: '心里不舒服，觉得被推开了', b: '好的，各做各的事，晚点再说' },
+  // Love Language 1
+  { dim: '爱的语言 · 核心需求', text: '什么事最让你感到"被爱"？', a: 'TA认真听我说话、给予肯定和鼓励', b: 'TA花时间陪我、注意力在我身上' },
+  // Love Language 2
+  { dim: '爱的语言 · 被爱信号', text: '以下哪个最让你心动？', a: '突然收到TA寄的/做的小礼物', b: 'TA主动帮我做事（做饭/跑腿/收拾）' },
+  // Love Language 3
+  { dim: '爱的语言 · 理想时刻', text: '最幸福的瞬间是——', a: '牵手、拥抱、靠在一起', b: 'TA说了一句"你辛苦了，我都知道"' },
+  // Love Language 4
+  { dim: '爱的语言 · 理想约会', text: '最理想的二人约会——', a: '一起去没去过的地方探险', b: '窝在家里各干各的但知道对方在旁边' },
+  // Love Language 5
+  { dim: '爱的语言 · 日常关心', text: 'TA每天做什么最让你温暖？', a: '睡前互道晚安、视频聊几分钟', b: '记住你说想吃的东西然后买回来' }
+];
+
+// ===== STATE =====
+let currentPerson = 0; // 0=A, 1=B
+let currentQ = 0;
+let answers = { A: [], B: [] };
+
+// ===== DEEP STATE =====
+let lastResult = null;        // 缓存快速版结果
+let deepAnswers = { A: [], B: [] };
+let deepPerson = 0;
+let deepQ = 0;
+
+// ===== NAVIGATION =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToPersonSelect() { showScreen('screen-person'); }
+
+function startQuiz(person) {
+  currentPerson = person;
+  currentQ = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const total = questions.length;
+  const key = currentPerson === 0 ? 'A' : 'B';
+  const isLast = currentQ === total - 1;
+
+  document.getElementById('progressFill').style.width = ((currentQ + 1) / total * 100) + '%';
+  document.getElementById('qCounter').innerHTML =
+    '<span style="color:' + (currentPerson === 0 ? '#ff6b9d' : '#6dd5fa') + ';font-weight:600;">' +
+    (currentPerson === 0 ? '&#128105; 你的答案' : '&#128104; TA 的答案') +
+    '</span> · 第 ' + (currentQ + 1) + ' / ' + total + ' 题' +
+    (isLast ? ' <span style="color:#c44dff;">（最后一题，马上就好）</span>' : '');
+  document.getElementById('qDim').textContent = q.dim;
+  document.getElementById('qText').textContent = q.text;
+
+  const optArea = document.getElementById('qOptions');
+  optArea.innerHTML = '';
+  const optA = document.createElement('div');
+  optA.className = 'option';
+  optA.textContent = q.a;
+  optA.onclick = () => selectAnswer(0);
+  const optB = document.createElement('div');
+  optB.className = 'option';
+  optB.textContent = q.b;
+  optB.onclick = () => selectAnswer(1);
+  optArea.appendChild(optA);
+  optArea.appendChild(optB);
+}
+
+function selectAnswer(val) {
+  const key = currentPerson === 0 ? 'A' : 'B';
+  answers[key].push(val);
+  currentQ++;
+
+  if (currentQ < questions.length) {
+    renderQuestion();
+  } else {
+    if (currentPerson === 0) {
+      // A 全部答完 → 展示过渡页，不要静默切到 B
+      showScreen('screen-transition');
+    } else {
+      // B 全部答完 → 进入计算
+      showScreen('screen-computing');
+      setTimeout(() => { computeResult(); showScreen('screen-result'); }, 2000);
+    }
+  }
+}
+
+function startPersonB() {
+  currentPerson = 1;
+  currentQ = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function startPersonBQuick() {
+  // 单人模式：替 TA 猜——默认全部选和 A 相反的方向（制造差异）
+  // 但如果 A 已经在某个维度上极端倾向，保留一个"跟 A 一样"的选项让结果不过于低分
+  currentPerson = 1;
+  currentQ = 0;
+  answers.B = answers.A.map((v, i) => {
+    // MBTI 前 4 题：反转制造差异；依恋 3 题：一半保留；爱的语言 5 题：随机
+    if (i < 4) return 1 - v;
+    if (i < 7) return i % 2 === 0 ? v : 1 - v;
+    return (i + v) % 2;
+  });
+  // 跳过 B 的答题流程，直接进计算
+  showScreen('screen-computing');
+  setTimeout(() => { computeResult(); showScreen('screen-result'); }, 1800);
+}
+
+// ===== INVITE LINK =====
+function encodeAnswers(arr) {
+  // 用简单 base64（本地 file:// 也能用），兼容中文字符安全
+  return btoa(arr.join(''));
+}
+function decodeAnswers(str) {
+  try { return atob(str).split('').map(Number); } catch(e) { return null; }
+}
+
+function generateInviteLink() {
+  // 保留当前 URL 的路径部分，追加 ?invite=
+  const base = location.href.split('?')[0].split('#')[0];
+  const data = encodeAnswers(answers.A);
+  return base + '?invite=' + data;
+}
+
+function copyInviteLink() {
+  const link = generateInviteLink();
+  const box = document.getElementById('inviteLinkBox');
+  const txt = document.getElementById('inviteLinkText');
+  txt.textContent = link;
+  box.style.display = 'block';
+
+  // 复制到剪贴板
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(link).then(() => {
+      document.getElementById('btnInvite').innerHTML = '&#10003; 已复制，去微信粘贴发给 TA';
+    }).catch(() => fallbackCopy(link));
+  } else {
+    fallbackCopy(link);
+  }
+}
+
+function fallbackCopy(link) {
+  const ta = document.createElement('textarea');
+  ta.value = link;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); 
+    document.getElementById('btnInvite').innerHTML = '&#10003; 已复制，去微信粘贴发给 TA';
+  } catch(e) {
+    // 复制失败就让用户长按选中
+    document.getElementById('btnInvite').innerHTML = '&#128279; 点一下长按选中链接';
+  }
+  document.body.removeChild(ta);
+}
+
+function acceptInvite() {
+  currentPerson = 1;
+  currentQ = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function checkInviteOnLoad() {
+  const params = new URLSearchParams(location.search);
+  const inv = params.get('invite');
+  if (!inv) return false;
+  const decoded = decodeAnswers(inv);
+  if (!decoded || decoded.length !== 12) return false;
+  answers.A = decoded;
+  // 直接跳到邀请欢迎页，覆盖默认的 landing
+  showScreen('screen-invite-welcome');
+  return true;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  checkInviteOnLoad();
+});
+
+// ===== CALCULATION =====
+function computeResult() {
+  const a = answers.A, b = answers.B;
+
+  // MBTI extraction (questions 0-3)
+  const mbtiA = (a[0]===0?'E':'I') + (a[1]===0?'S':'N') + (a[2]===0?'T':'F') + (a[3]===0?'J':'P');
+  const mbtiB = (b[0]===0?'E':'I') + (b[1]===0?'S':'N') + (b[2]===0?'T':'F') + (b[3]===0?'J':'P');
+
+  // Attachment (questions 4-6): count of "anxious" picks (chose a=0)
+  const anxCountA = (a[4]===0?1:0)+(a[5]===0?1:0)+(a[6]===0?1:0);
+  const anxCountB = (b[4]===0?1:0)+(b[5]===0?1:0)+(b[6]===0?1:0);
+  const attachA = anxCountA >= 3 ? '焦虑型' : anxCountA === 2 ? '偏焦虑' : anxCountA === 1 ? '偏安全' : '安全型';
+  const attachB = anxCountB >= 3 ? '焦虑型' : anxCountB === 2 ? '偏焦虑' : anxCountB === 1 ? '偏安全' : '安全型';
+
+  // Love Language (questions 7-11)
+  const llA = loveLanguage(a);
+  const llB = loveLanguage(b);
+
+  // ===== Six continuous dimensions, cross-wired from multiple answers =====
+  function dims(x) {
+    const clamp = v => Math.max(12, Math.min(94, Math.round(v)));
+    // 外向度
+    let ex = 50 + (x[0]===0?22:-22) + (x[9]===0?14:-14) + (x[7]===1?-6:6);
+    // 直觉力
+    let ni = 50 + (x[1]===1?28:-28) + (x[3]===1?10:-10);
+    // 感受力
+    let fe = 50 + (x[2]===1?26:-26) + (x[7]===0?8:-8) + (x[10]===0?6:-6);
+    // 灵活度
+    let fl = 50 + (x[3]===1?26:-26) + (x[5]===1?10:-10) + (x[11]===1?6:-6);
+    // 亲密需求（焦虑程度映射）
+    let in_ = 30 + ((x[4]===0?1:0)+(x[5]===0?1:0)+(x[6]===0?1:0))*20;
+    // 表达力（爱的语言多样性 + 主动信号）
+    const spread = new Set([x[7],x[8],x[9],x[10],x[11]]).size;
+    let ex_ = 40 + spread*12 + (x[8]===1?6:-6);
+    return [clamp(ex), clamp(ni), clamp(fe), clamp(fl), clamp(in_), clamp(ex_)];
+  }
+  const dimsA = dims(a), dimsB = dims(b);
+  const axisNames = ['外向度','直觉力','感受力','灵活度','亲密需求','表达力'];
+
+  // ===== Per-axis compatibility (energy axes reward complementarity, value axes reward similarity) =====
+  function axisCompat(i, da, db) {
+    const diff = Math.abs(da - db);
+    if (i === 0 || i === 3) return 100 - Math.max(0, diff - 25) * 1.1; // 外向/灵活：适度差异更好
+    if (i === 4) return 100 - diff * 0.95;   // 亲密需求：越接近越好（焦虑×回避最伤）
+    if (i === 1 || i === 2) return 100 - diff * 0.78; // 直觉/感受：相似加分
+    return 100 - diff * 0.6;                 // 表达力：影响较小
+  }
+  const weights = [0.15, 0.18, 0.2, 0.14, 0.23, 0.10];
+  let matchSum = 0, compats = [];
+  for (let i = 0; i < 6; i++) {
+    const c = Math.max(20, Math.min(99, axisCompat(i, dimsA[i], dimsB[i])));
+    compats.push(Math.round(c));
+    matchSum += c * weights[i];
+  }
+  let matchPercent = Math.round(matchSum);
+  matchPercent = Math.max(42, Math.min(97, matchPercent));
+
+  // ===== Type name (expanded) =====
+  const diffCount = [mbtiA[0]!==mbtiB[0], mbtiA[1]!==mbtiB[1], mbtiA[2]!==mbtiB[2], mbtiA[3]!==mbtiB[3]].filter(Boolean).length;
+  let typeName;
+  if (diffCount === 0) typeName = '镜像同频型 — 几乎是一个模子';
+  else if (diffCount === 1) typeName = '微调共鸣型 — 大方向一致，小处互补';
+  else if (diffCount === 2) typeName = '互补成长型 — 差异带来吸引力';
+  else if (diffCount === 3) typeName = '磨合挑战型 — 需要刻意沟通';
+  else typeName = '反差张力型 — 像照镜子又像照反镜';
+
+  // ===== Auto-pick most similar / most different axis =====
+  let maxDiff = -1, minDiff = 999, mostDiffAxis = '', mostSimAxis = '';
+  for (let i = 0; i < 6; i++) {
+    const d = Math.abs(dimsA[i]-dimsB[i]);
+    if (d > maxDiff) { maxDiff = d; mostDiffAxis = axisNames[i]; }
+    if (d < minDiff) { minDiff = d; mostSimAxis = axisNames[i]; }
+  }
+  const loveSame = llA.name === llB.name;
+
+  // ===== Composed insight (multi-part, injects real numbers) =====
+  const attachKey = [attachA, attachB].sort().join('|');
+  let core;
+  if (attachKey === '安全型|焦虑型' || attachKey === '偏安全|焦虑型') {
+    core = '你们是典型的"追—逃"结构：' + (anxCountA>anxCountB?'你':'TA') + '更需要确定的回应，' + (anxCountA>anxCountB?'TA':'你') + '需要独处回血。这不是不爱，是亲密电池的大小不同。';
+  } else if (attachKey === '焦虑型|焦虑型') {
+    core = '两个人都容易"没被秒回就想多"，好处是彼此懂，风险是一吵架就升级成冷战。你们最需要的是一个"我很忙但没忘你"的约定暗号。';
+  } else if (attachKey === '安全型|安全型' || attachKey === '安全型|偏安全' || attachKey === '偏安全|偏安全') {
+    core = '你们的依恋模式都很稳，吵架不容易失控、独处也不会慌。真正的隐患是"太独立，忘了主动靠近"——需要有人定期制造一点黏。';
+  } else {
+    core = '你们对亲密距离的需求比较接近，日常相处不容易出现"一个追一个逃"的拉扯，这是很多情侣羡慕不来的底子。';
+  }
+  const lovePart = loveSame
+    ? '有意思的是，你们表达爱的方式高度一致（都是"' + llA.name + '"），付出很容易被对方接收到，很少出现"我给的你没感到"的错位。'
+    : '要注意爱的语言错位：你最想要"' + llA.name + '"，TA 却习惯用"' + llB.name + '"付出——不是不够爱，是频道没对上，长期容易双方都觉得委屈。';
+  const axisPart = '你们最合拍的是「' + mostSimAxis + '」，差异最大的是「' + mostDiffAxis + '」（相差 ' + maxDiff + ' 分），' + (maxDiff > 45 ? '这个维度上要多一分"求同存异"的耐心。' : '整体差异可控，磨合成本不高。');
+
+  const insight = core + ' ' + lovePart + ' ' + axisPart;
+
+  // ===== Render =====
+  document.getElementById('pairNames').textContent = mbtiA + ' × ' + mbtiB;
+  document.getElementById('matchScore').textContent = matchPercent + '%';
+  document.getElementById('matchType').textContent = typeName;
+  document.getElementById('insightText').textContent = insight;
+
+  // Dimension bars
+  const dimArea = document.getElementById('dimensionsArea');
+  const dimLabels = [
+    { name: '社交能量', a: (a[0]===0?'外向 E':'内向 I'), b: (b[0]===0?'外向 E':'内向 I'), compat: compats[0] },
+    { name: '依恋模式', a: attachA, b: attachB, compat: compats[4] },
+    { name: '爱的语言', a: llA.name, b: llB.name, compat: loveSame ? compats[5] : Math.max(35, compats[5]-15) }
+  ];
+  let html = '';
+  dimLabels.forEach((d) => {
+    html += `<div class="dim-item">
+      <div class="dim-header"><span class="dim-name">${d.name}</span><span class="dim-score">${d.compat}%</span></div>
+      <div class="dim-bar"><div class="dim-fill a" style="width:${d.compat}%"></div></div>
+      <div class="dim-bar" style="margin-top:4px"><div class="dim-fill b" style="width:${Math.max(20,d.compat - (Math.abs(dimsA[0]-dimsB[0])/3))}%"></div></div>
+      <div class="dim-tags"><span class="dim-tag a">${d.a}</span><span class="dim-tag b">${d.b}</span></div>
+    </div>`;
+  });
+  dimArea.innerHTML = html;
+
+  // 缓存结果供深度版复用
+  lastResult = { matchPercent, dimsA, dimsB, attachA, attachB, anxCountA, anxCountB, llA, llB, mbtiA, mbtiB, diffCount, compats, mostDiffAxis, maxDiff, axisNames };
+
+  // Radar chart
+  drawRadar(dimsA, dimsB);
+}
+
+function loveLanguage(x) {
+  // 5 love languages mapped from questions 7-11 (a/b each maps to one)
+  const pairs = [
+    ['肯定言词','精心时刻'],   // q7
+    ['接受礼物','服务行动'],   // q8
+    ['身体接触','肯定言词'],   // q9
+    ['精心时刻','身体接触'],   // q10
+    ['接受礼物','服务行动']    // q11
+  ];
+  const tally = {};
+  for (let i = 0; i < 5; i++) {
+    const pick = x[7+i] === 0 ? pairs[i][0] : pairs[i][1];
+    tally[pick] = (tally[pick]||0) + 1;
+  }
+  const sorted = Object.entries(tally).sort((p,q)=>q[1]-p[1]);
+  const top = sorted[0][0];
+  const strength = sorted[0][1];
+  return { name: top, score: 45 + strength*12 };
+}
+
+function startDeepQuiz() {
+  document.getElementById('payModal').classList.add('show');
+}
+
+function closePayModal() {
+  document.getElementById('payModal').classList.remove('show');
+}
+
+function confirmPay() {
+  document.getElementById('payModal').classList.remove('show');
+  const pp = document.getElementById('payProcessing');
+  const txt = document.getElementById('ppText');
+  pp.classList.add('show');
+  txt.textContent = '正在跳转微信支付...';
+  setTimeout(() => { txt.textContent = '支付成功 ✓'; }, 1100);
+  setTimeout(() => {
+    pp.classList.remove('show');
+    // 进入深度答题
+    deepAnswers = { A: [], B: [] };
+    deepPerson = 0;
+    deepQ = 0;
+    showScreen('screen-deep');
+    renderDeepQuestion();
+  }, 2000);
+}
+
+// ===== DEEP QUESTIONS (18) =====
+const deepQuestions = [
+  // MBTI 深化 6
+  { dim:'深度 · 能量恢复', text:'连续社交一整天后，你通常需要——', a:'再约人吃饭继续热闹', b:'一整天独处才缓过来' },
+  { dim:'深度 · 表达节奏', text:'讨论问题时你更习惯——', a:'想到就说、边说边想', b:'先在脑子里想清楚再开口' },
+  { dim:'深度 · 信息信任', text:'你更相信哪种结论——', a:'亲身经验验证过的、看得见的数据', b:'逻辑推演和直觉洞察出的规律' },
+  { dim:'深度 · 话题偏好', text:'聊天时你更享受——', a:'聊具体的事：吃啥去哪买了啥', b:'聊抽象的：意义、未来、想法' },
+  { dim:'深度 · 冲突立场', text:'朋友跟你意见不同时，你第一反应——', a:'先分析谁对谁错讲道理', b:'先照顾彼此感受怕伤感情' },
+  { dim:'深度 · 计划弹性', text:'计划被打乱时你会——', a:'烦躁，必须按原计划来', b:'无所谓，随机应变更自在' },
+  // 依恋深化 6
+  { dim:'深度 · 分离焦虑', text:'和 TA 分开几天出差，你会——', a:'频繁想看对方动态、想视频', b:'挺好，享受难得的独处' },
+  { dim:'深度 · 确认需求', text:'你需要 TA 多久说一次"我爱你"——', a:'希望经常、最好每天都有', b:'放在心里就行，不必挂嘴上' },
+  { dim:'深度 · 冷战耐受', text:'吵架后超过一天不说话，你会——', a:'坐不住，必须主动破冰', b:'可以等对方先冷静' },
+  { dim:'深度 · 被忽视反应', text:'觉得被 TA 冷落时，你倾向于——', a:'追问、表达不满、要个说法', b:'缩回自己的壳里、表面没事' },
+  { dim:'深度 · 边界感', text:'你理想中的两人边界是——', a:'尽量融合，什么都一起做', b:'各自有独立空间和朋友圈' },
+  { dim:'深度 · 安全感来源', text:'你的安全感更多来自——', a:'对方的回应和陪伴频率', b:'自己经济和精神上的独立' },
+  // 沟通与冲突 6
+  { dim:'深度 · 沟通偏好', text:'重要的事你更喜欢——', a:'当面或语音，能听到语气', b:'文字，可以斟酌措辞' },
+  { dim:'深度 · 压力表现', text:'压力大时你会——', a:'找人倾诉说出来才舒服', b:'自己消化，不太想讲话' },
+  { dim:'深度 · 道歉方式', text:'你更接受哪种道歉——', a:'明确说"对不起"+解释+承诺', b:'默默对你好、当作翻篇' },
+  { dim:'深度 · 需求表达', text:'想要什么时你通常——', a:'直接说清楚不绕弯', b:'暗示，希望 TA 自己懂' },
+  { dim:'深度 · 情绪传染', text:'TA 情绪低落时你会——', a:'一起低落、被带跑', b:'保持稳定、当 TA 的支柱' },
+  { dim:'深度 · 未来规划', text:'关于两人的未来——', a:'希望早点定下来（同居/结婚）', b:'走一步看一步，不想被绑定' }
+];
+
+function renderDeepQuestion() {
+  const q = deepQuestions[deepQ];
+  const total = deepQuestions.length;
+  document.getElementById('deepProgress').style.width = ((deepQ+1)/total*100)+'%';
+  document.getElementById('deepCounter').innerHTML =
+    '<span style="color:'+(deepPerson===0?'#ff6b9d':'#6dd5fa')+';font-weight:600;">'+
+    (deepPerson===0?'&#128105; 你 · 深度题':'&#128104; TA · 深度题')+'</span> · 第 '+(deepQ+1)+' / '+total+' 题'+
+    (deepQ===total-1?' <span style="color:#c44dff;">（最后一题，马上出报告）</span>':'');
+  document.getElementById('deepDim').textContent = q.dim;
+  document.getElementById('deepText').textContent = q.text;
+  const optArea = document.getElementById('deepOptions');
+  optArea.innerHTML = '';
+  [['a',0],['b',1]].forEach(([k,v])=>{
+    const el=document.createElement('div');
+    el.className='option';
+    el.textContent=q[k];
+    el.onclick=()=>selectDeepAnswer(v);
+    optArea.appendChild(el);
+  });
+}
+
+function selectDeepAnswer(val) {
+  const key = deepPerson===0?'A':'B';
+  deepAnswers[key].push(val);
+  deepQ++;
+  if (deepQ < deepQuestions.length) {
+    renderDeepQuestion();
+  } else {
+    if (deepPerson===0) {
+      deepPerson=1; deepQ=0;
+      showScreen('screen-deep-transition');
+    } else {
+      showScreen('screen-computing');
+      document.querySelector('#screen-computing h3').textContent='正在生成你们的深度报告...';
+      setTimeout(computeDeepReport, 1800);
+    }
+  }
+}
+
+function startDeepB() {
+  showScreen('screen-deep');
+  renderDeepQuestion();
+}
+
+function computeDeepReport() {
+  const r = lastResult;
+  const da = deepAnswers.A, db = deepAnswers.B;
+
+  // 用深度题微调亲密需求/沟通维度：焦虑信号计数
+  const anxDeepA = da.slice(6,12).filter(v=>v===0).length; // 依恋6题里选 a 越多越焦虑
+  const anxDeepB = db.slice(6,12).filter(v=>v===0).length;
+  const anxTotalA = r.anxCountA + anxDeepA;   // 0-9
+  const anxTotalB = r.anxCountB + anxDeepB;
+  const anxGap = Math.abs(anxTotalA - anxTotalB);
+  const anxiousOne = anxTotalA > anxTotalB ? '你' : 'TA';
+  const avoidantOne = anxTotalA > anxTotalB ? 'TA' : '你';
+
+  // 沟通偏好差异（题12-17）
+  const commMismatch = da.slice(12,18).filter((v,i)=>v!==db.slice(12,18)[i]).length;
+
+  // 冲突预警
+  const conflictWeek = anxGap>=4 ? '第2-3周' : anxGap>=2 ? '第3-4周' : '第1-2个月';
+  const conflictScene = r.mostDiffAxis==='亲密需求' || anxGap>=3
+    ? '回复消息的节奏差' : r.mostDiffAxis==='外向度' ? '周末怎么过的安排分歧' : r.mostDiffAxis==='灵活度' ? '临时改计划的容忍度' : '表达关心的方式错位';
+  const conflictText = `${conflictWeek}，你们最可能因为「${conflictScene}」爆发第一次冷战。${anxiousOne}会在等待里反复确认、越想越不安，而${avoidantOne}需要退回去独处回血——一个越追越急，一个越被追越想逃，这是把小摩擦拖成大问题的经典回路。`;
+
+  // 给焦虑方 / 回避方的建议（按谁更焦虑）
+  const adviceAnxious = [
+    `当${avoidantOne}说"我想静静"时，那是 TA 的充电方式，不是不爱你——把追问换成一句"好，你需要我的时候我在"。`,
+    `别用"翻旧账/连环消息"表达不安，直接说需求：把"你怎么又不理我"改成"今晚能陪我聊十分钟吗"。`,
+    `给自己找一个不依赖 TA 的情绪出口（朋友/运动/爱好），你的不安会明显下降。`
+  ];
+  const adviceAvoidant = [
+    `每天主动给一个"信号"，哪怕只是一个表情包，${anxiousOne}要的不是时长，是"被记得"的确定感。`,
+    `需要独处时先报备再消失："我今晚想自己待会儿，明早找你"，给个归期，TA 就不会慌。`,
+    `${anxiousOne}情绪上来时，先接住感受再讲道理，一句"我知道你难受"比十句解释有用。`
+  ];
+  const adviceA = anxTotalA>=anxTotalB ? adviceAnxious : adviceAvoidant;
+  const adviceB = anxTotalA>=anxTotalB ? adviceAvoidant : adviceAnxious;
+
+  // 30 天走势（基于匹配度 + 焦虑差 + 沟通错位）
+  const base = r.matchPercent;
+  const w1 = Math.min(98, base+8);
+  const w2 = Math.max(40, base - anxGap*2);
+  const w3 = Math.max(38, base - anxGap*2 - commMismatch*2 + 3);
+  const w4 = Math.min(97, base + (anxGap<=2?6:-2));
+  const trend = [
+    {w:'第1周', v:w1, note:'甜蜜高峰'},
+    {w:'第2周', v:w2, note:anxGap>=3?'摩擦初现':'平稳'},
+    {w:'第3周', v:w3, note:commMismatch>=3?'沟通考验':'磨合'},
+    {w:'第4周', v:w4, note:w4>=base?'回暖上升':'需主动'}
+  ];
+  const trendText = w4>=base
+    ? '你们整体是"高开→小回调→稳步回暖"的健康曲线，只要第3周那次沟通考验不回避，第4周会进入更踏实的舒适期。'
+    : '你们需要警惕第4周的"平淡期提前"——建议在第3周主动安排一次深谈或新鲜约会，把走势拉回来。';
+
+  // 渲染
+  const pc = document.getElementById('paidContent');
+  pc.innerHTML = `
+    <div class="deep-block">
+      <h5>&#9888;&#65039; 冲突高发预警</h5>
+      <p>${conflictText}</p>
+    </div>
+    <div class="deep-block">
+      <h5>&#128105; 给你的 3 条沟通建议</h5>
+      ${adviceA.map((s,i)=>`<div class="advice-item">${i+1}. ${s}</div>`).join('')}
+    </div>
+    <div class="deep-block">
+      <h5>&#128104; 给 TA 的 3 条沟通建议</h5>
+      ${adviceB.map((s,i)=>`<div class="advice-item">${i+1}. ${s}</div>`).join('')}
+    </div>
+    <div class="deep-block">
+      <h5>&#128200; 30 天关系走势</h5>
+      ${trend.map(t=>`<div class="trend-row"><span class="trend-week">${t.w}</span><div class="trend-bar"><div class="trend-fill" style="width:${t.v}%"></div></div><span class="trend-note">${t.note}</span></div>`).join('')}
+      <p style="margin-top:10px">${trendText}</p>
+    </div>
+    <div class="deep-done">&#10003; 深度版报告已生成 · 30 题完整版</div>
+  `;
+  pc.classList.add('unlocked');
+  document.getElementById('lockOverlay').style.display = 'none';
+
+  // 回到结果页并滚动到深度报告
+  showScreen('screen-result');
+  setTimeout(() => { pc.scrollIntoView({behavior:'smooth', block:'center'}); }, 300);
+}
+
+// ===== RADAR CHART =====
+function drawRadar(dimsA, dimsB) {
+  const canvas = document.getElementById('radarCanvas');
+  const ctx = canvas.getContext('2d');
+  const cx = 280, cy = 280, r = 200;
+  const n = 6;
+  const labels = ['外向度', '直觉力', '感受力', '灵活度', '亲密需求', '表达力'];
+
+  ctx.clearRect(0, 0, 560, 560);
+
+  // Grid rings
+  for (let ring = 1; ring <= 4; ring++) {
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= n; i++) {
+      const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+      const x = cx + Math.cos(angle) * r * ring / 4;
+      const y = cy + Math.sin(angle) * r * ring / 4;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  // Spokes
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r);
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.stroke();
+  }
+
+  // Data A (pink)
+  ctx.beginPath();
+  for (let i = 0; i <= n; i++) {
+    const idx = i % n;
+    const angle = (Math.PI * 2 / n) * idx - Math.PI / 2;
+    const val = dimsA[idx] / 100;
+    const x = cx + Math.cos(angle) * r * val;
+    const y = cy + Math.sin(angle) * r * val;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255, 107, 157, 0.15)';
+  ctx.fill();
+  ctx.strokeStyle = '#ff6b9d';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Data B (cyan)
+  ctx.beginPath();
+  for (let i = 0; i <= n; i++) {
+    const idx = i % n;
+    const angle = (Math.PI * 2 / n) * idx - Math.PI / 2;
+    const val = dimsB[idx] / 100;
+    const x = cx + Math.cos(angle) * r * val;
+    const y = cy + Math.sin(angle) * r * val;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(109, 213, 250, 0.12)';
+  ctx.fill();
+  ctx.strokeStyle = '#6dd5fa';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Dots A
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const val = dimsA[i] / 100;
+    const x = cx + Math.cos(angle) * r * val;
+    const y = cy + Math.sin(angle) * r * val;
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff6b9d';
+    ctx.fill();
+  }
+
+  // Dots B
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const val = dimsB[i] / 100;
+    const x = cx + Math.cos(angle) * r * val;
+    const y = cy + Math.sin(angle) * r * val;
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#6dd5fa';
+    ctx.fill();
+  }
+
+  // Labels
+  ctx.font = '13px PingFang SC, Microsoft YaHei, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const x = cx + Math.cos(angle) * (r + 30);
+    const y = cy + Math.sin(angle) * (r + 30);
+    ctx.fillText(labels[i], x, y);
+  }
+}
+</script>
+
+
+</body><browser-skill-overlay aria-hidden="true" data-bsk-overlay=""><template shadowrootmode="open">
+<!-- saved from url=(0068)file:///D:/[A03]Qoder%E5%8D%83%E9%97%AE%E8%B5%84%E6%96%99/index.html -->
+<html><head><style>/* WXT Shadow Root Reset */ :host{all:initial !important;}
+/*! tailwindcss v4.3.0 | MIT License | https://tailwindcss.com */
+@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-divide-x-reverse:0;--tw-border-style:solid;--tw-divide-y-reverse:0;--tw-leading:initial;--tw-font-weight:initial;--tw-tracking:initial;--tw-ordinal:initial;--tw-slashed-zero:initial;--tw-numeric-figure:initial;--tw-numeric-spacing:initial;--tw-numeric-fraction:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-backdrop-blur:initial;--tw-backdrop-brightness:initial;--tw-backdrop-contrast:initial;--tw-backdrop-grayscale:initial;--tw-backdrop-hue-rotate:initial;--tw-backdrop-invert:initial;--tw-backdrop-opacity:initial;--tw-backdrop-saturate:initial;--tw-backdrop-sepia:initial;--tw-duration:initial;--tw-ease:initial}}}@layer theme{:root,:host{--font-sans:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;--color-red-400:oklch(70.4% .191 22.216);--color-orange-500:oklch(70.5% .213 47.604);--color-amber-500:oklch(76.9% .188 70.08);--color-emerald-500:oklch(69.6% .17 162.48);--color-gray-100:oklch(96.7% .003 264.542);--color-gray-200:oklch(92.8% .006 264.531);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-black:#000;--color-white:#fff;--spacing:.25rem;--container-sm:24rem;--container-md:28rem;--container-lg:32rem;--container-3xl:48rem;--container-4xl:56rem;--text-xs:.75rem;--text-xs--line-height:calc(1 / .75);--text-sm:.875rem;--text-sm--line-height:calc(1.25 / .875);--text-base:1rem;--text-base--line-height:calc(1.5 / 1);--text-lg:1.125rem;--text-lg--line-height:calc(1.75 / 1.125);--text-xl:1.25rem;--text-xl--line-height:calc(1.75 / 1.25);--text-2xl:1.5rem;--text-2xl--line-height:calc(2 / 1.5);--text-3xl:1.875rem;--text-3xl--line-height:calc(2.25 / 1.875);--font-weight-light:300;--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--tracking-tight:-.025em;--tracking-widest:.1em;--leading-tight:1.25;--leading-snug:1.375;--leading-relaxed:1.625;--radius-sm:.25rem;--radius-md:.375rem;--radius-lg:.5rem;--radius-xl:.75rem;--radius-2xl:1rem;--ease-out:cubic-bezier(0, 0, .2, 1);--ease-in-out:cubic-bezier(.4, 0, .2, 1);--animate-spin:spin 1s linear infinite;--blur-sm:8px;--blur-md:12px;--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}}@layer components;@layer utilities{.pointer-events-none{pointer-events:none}.\!visible{visibility:visible!important}.collapse{visibility:collapse}.invisible{visibility:hidden}.visible{visibility:visible}.sr-only{clip-path:inset(50%);white-space:nowrap;border-width:0;width:1px;height:1px;margin:-1px;padding:0;position:absolute;overflow:hidden}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.sticky{position:sticky}.inset-0{inset:calc(var(--spacing) * 0)}.top-0{top:calc(var(--spacing) * 0)}.top-4{top:calc(var(--spacing) * 4)}.right-0{right:calc(var(--spacing) * 0)}.right-4{right:calc(var(--spacing) * 4)}.bottom-full{bottom:100%}.left-0{left:calc(var(--spacing) * 0)}.isolate{isolation:isolate}.z-10{z-index:10}.z-\[2147483646\]{z-index:2147483646}.z-\[2147483647\]{z-index:2147483647}.col-start-2{grid-column-start:2}.container{width:100%}@media (width>=40rem){.container{max-width:40rem}}@media (width>=48rem){.container{max-width:48rem}}@media (width>=64rem){.container{max-width:64rem}}@media (width>=80rem){.container{max-width:80rem}}@media (width>=96rem){.container{max-width:96rem}}.m-0{margin:calc(var(--spacing) * 0)}.mx-auto{margin-inline:auto}.my-2{margin-block:calc(var(--spacing) * 2)}.mt-0{margin-top:calc(var(--spacing) * 0)}.mt-0\.5{margin-top:calc(var(--spacing) * .5)}.mt-1{margin-top:calc(var(--spacing) * 1)}.mt-2{margin-top:calc(var(--spacing) * 2)}.mt-3{margin-top:calc(var(--spacing) * 3)}.mt-4{margin-top:calc(var(--spacing) * 4)}.mt-5{margin-top:calc(var(--spacing) * 5)}.mt-6{margin-top:calc(var(--spacing) * 6)}.mt-8{margin-top:calc(var(--spacing) * 8)}.mr-2{margin-right:calc(var(--spacing) * 2)}.mb-1\.5{margin-bottom:calc(var(--spacing) * 1.5)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-2\.5{margin-bottom:calc(var(--spacing) * 2.5)}.mb-3{margin-bottom:calc(var(--spacing) * 3)}.mb-4{margin-bottom:calc(var(--spacing) * 4)}.mb-5{margin-bottom:calc(var(--spacing) * 5)}.mb-6{margin-bottom:calc(var(--spacing) * 6)}.mb-7{margin-bottom:calc(var(--spacing) * 7)}.mb-8{margin-bottom:calc(var(--spacing) * 8)}.ml-1{margin-left:calc(var(--spacing) * 1)}.ml-2{margin-left:calc(var(--spacing) * 2)}.ml-auto{margin-left:auto}.\!hidden{display:none!important}.block{display:block}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline{display:inline}.inline-flex{display:inline-flex}.table{display:table}.size-2{width:calc(var(--spacing) * 2);height:calc(var(--spacing) * 2)}.size-3{width:calc(var(--spacing) * 3);height:calc(var(--spacing) * 3)}.size-3\.5{width:calc(var(--spacing) * 3.5);height:calc(var(--spacing) * 3.5)}.size-4{width:calc(var(--spacing) * 4);height:calc(var(--spacing) * 4)}.size-5{width:calc(var(--spacing) * 5);height:calc(var(--spacing) * 5)}.size-6{width:calc(var(--spacing) * 6);height:calc(var(--spacing) * 6)}.size-7{width:calc(var(--spacing) * 7);height:calc(var(--spacing) * 7)}.size-8{width:calc(var(--spacing) * 8);height:calc(var(--spacing) * 8)}.size-10{width:calc(var(--spacing) * 10);height:calc(var(--spacing) * 10)}.size-\[18px\]{width:18px;height:18px}.h-1{height:calc(var(--spacing) * 1)}.h-1\.5{height:calc(var(--spacing) * 1.5)}.h-5{height:calc(var(--spacing) * 5)}.h-7{height:calc(var(--spacing) * 7)}.h-8{height:calc(var(--spacing) * 8)}.h-9{height:calc(var(--spacing) * 9)}.h-full{height:100%}.max-h-64{max-height:calc(var(--spacing) * 64)}.max-h-80{max-height:calc(var(--spacing) * 80)}.max-h-\[180px\]{max-height:180px}.min-h-48{min-height:calc(var(--spacing) * 48)}.min-h-screen{min-height:100vh}.w-9{width:calc(var(--spacing) * 9)}.w-11{width:calc(var(--spacing) * 11)}.w-20{width:calc(var(--spacing) * 20)}.w-24{width:calc(var(--spacing) * 24)}.w-56{width:calc(var(--spacing) * 56)}.w-80{width:calc(var(--spacing) * 80)}.w-\[400px\]{width:400px}.w-fit{width:fit-content}.w-full{width:100%}.max-w-3xl{max-width:var(--container-3xl)}.max-w-4xl{max-width:var(--container-4xl)}.max-w-72{max-width:calc(var(--spacing) * 72)}.max-w-\[88px\]{max-width:88px}.max-w-\[340px\]{max-width:340px}.max-w-\[1480px\]{max-width:1480px}.max-w-lg{max-width:var(--container-lg)}.max-w-md{max-width:var(--container-md)}.max-w-sm{max-width:var(--container-sm)}.min-w-0{min-width:calc(var(--spacing) * 0)}.min-w-\[320px\]{min-width:320px}.flex-1{flex:1}.flex-shrink{flex-shrink:1}.shrink-0{flex-shrink:0}.grow{flex-grow:1}.basis-48{flex-basis:calc(var(--spacing) * 48)}.translate-x-0\.5{--tw-translate-x:calc(var(--spacing) * .5);translate:var(--tw-translate-x) var(--tw-translate-y)}.translate-x-4{--tw-translate-x:calc(var(--spacing) * 4);translate:var(--tw-translate-x) var(--tw-translate-y)}.-rotate-90{rotate:-90deg}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.animate-spin{animation:var(--animate-spin)}.cursor-pointer{cursor:pointer}.resize{resize:both}.resize-none{resize:none}.resize-y{resize:vertical}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-\[72px_minmax\(0\,1fr\)\]{grid-template-columns:72px minmax(0,1fr)}.grid-cols-\[minmax\(0\,1fr\)_minmax\(0\,2fr\)\]{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.items-start{align-items:flex-start}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-1{gap:calc(var(--spacing) * 1)}.gap-1\.5{gap:calc(var(--spacing) * 1.5)}.gap-2{gap:calc(var(--spacing) * 2)}.gap-2\.5{gap:calc(var(--spacing) * 2.5)}.gap-3{gap:calc(var(--spacing) * 3)}.gap-4{gap:calc(var(--spacing) * 4)}.gap-5{gap:calc(var(--spacing) * 5)}:where(.space-y-1\.5>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 1.5) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 1.5) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-2>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-2\.5>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 2.5) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 2.5) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-3>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-4>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-5>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 5) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-6>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-7>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 7) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 7) * calc(1 - var(--tw-space-y-reverse)))}.gap-x-4{column-gap:calc(var(--spacing) * 4)}.gap-x-5{column-gap:calc(var(--spacing) * 5)}.gap-y-2{row-gap:calc(var(--spacing) * 2)}.gap-y-3{row-gap:calc(var(--spacing) * 3)}:where(.divide-x>:not(:last-child)){--tw-divide-x-reverse:0;border-inline-style:var(--tw-border-style);border-inline-start-width:calc(1px * var(--tw-divide-x-reverse));border-inline-end-width:calc(1px * calc(1 - var(--tw-divide-x-reverse)))}:where(.divide-y>:not(:last-child)){--tw-divide-y-reverse:0;border-bottom-style:var(--tw-border-style);border-top-style:var(--tw-border-style);border-top-width:calc(1px * var(--tw-divide-y-reverse));border-bottom-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)))}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:var(--radius-2xl)}.rounded-full{border-radius:3.40282e38px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-sm{border-radius:var(--radius-sm)}.rounded-xl{border-radius:var(--radius-xl)}.\!border{border-style:var(--tw-border-style)!important;border-width:1px!important}.border{border-style:var(--tw-border-style);border-width:1px}.border-0{border-style:var(--tw-border-style);border-width:0}.border-y{border-block-style:var(--tw-border-style);border-block-width:1px}.border-t{border-top-style:var(--tw-border-style);border-top-width:1px}.border-r{border-right-style:var(--tw-border-style);border-right-width:1px}.border-b{border-bottom-style:var(--tw-border-style);border-bottom-width:1px}.border-b-2{border-bottom-style:var(--tw-border-style);border-bottom-width:2px}.border-dashed{--tw-border-style:dashed;border-style:dashed}.border-\[\#ffedd5\]{border-color:#ffedd5}.border-\[var\(--debug-accent\)\],.border-\[var\(--debug-accent\)\]\/30{border-color:var(--debug-accent)}@supports (color:color-mix(in lab, red, red)){.border-\[var\(--debug-accent\)\]\/30{border-color:color-mix(in oklab, var(--debug-accent) 30%, transparent)}}.border-\[var\(--debug-accent\)\]\/40{border-color:var(--debug-accent)}@supports (color:color-mix(in lab, red, red)){.border-\[var\(--debug-accent\)\]\/40{border-color:color-mix(in oklab, var(--debug-accent) 40%, transparent)}}.border-\[var\(--debug-accent\)\]\/50{border-color:var(--debug-accent)}@supports (color:color-mix(in lab, red, red)){.border-\[var\(--debug-accent\)\]\/50{border-color:color-mix(in oklab, var(--debug-accent) 50%, transparent)}}.border-gray-200{border-color:var(--color-gray-200)}.border-transparent{border-color:#0000}.bg-\[\#FFFBF7\]{background-color:#fffbf7}.bg-\[var\(--debug-tint\)\],.bg-\[var\(--debug-tint\)\]\/40{background-color:var(--debug-tint)}@supports (color:color-mix(in lab, red, red)){.bg-\[var\(--debug-tint\)\]\/40{background-color:color-mix(in oklab, var(--debug-tint) 40%, transparent)}}.bg-amber-500{background-color:var(--color-amber-500)}.bg-black\/40{background-color:#0006}@supports (color:color-mix(in lab, red, red)){.bg-black\/40{background-color:color-mix(in oklab, var(--color-black) 40%, transparent)}}.bg-emerald-500{background-color:var(--color-emerald-500)}.bg-gray-100{background-color:var(--color-gray-100)}.bg-orange-500{background-color:var(--color-orange-500)}.bg-transparent{background-color:#0000}.bg-white{background-color:var(--color-white)}.fill-\[\#111\]{fill:#111}.p-0\.5{padding:calc(var(--spacing) * .5)}.p-1{padding:calc(var(--spacing) * 1)}.p-2{padding:calc(var(--spacing) * 2)}.p-3{padding:calc(var(--spacing) * 3)}.p-4{padding:calc(var(--spacing) * 4)}.p-5{padding:calc(var(--spacing) * 5)}.p-6{padding:calc(var(--spacing) * 6)}.p-10{padding:calc(var(--spacing) * 10)}.p-20{padding:calc(var(--spacing) * 20)}.px-1{padding-inline:calc(var(--spacing) * 1)}.px-1\.5{padding-inline:calc(var(--spacing) * 1.5)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-2\.5{padding-inline:calc(var(--spacing) * 2.5)}.px-3{padding-inline:calc(var(--spacing) * 3)}.px-4{padding-inline:calc(var(--spacing) * 4)}.px-5{padding-inline:calc(var(--spacing) * 5)}.px-6{padding-inline:calc(var(--spacing) * 6)}.px-7{padding-inline:calc(var(--spacing) * 7)}.py-0{padding-block:calc(var(--spacing) * 0)}.py-0\.5{padding-block:calc(var(--spacing) * .5)}.py-1{padding-block:calc(var(--spacing) * 1)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-2\.5{padding-block:calc(var(--spacing) * 2.5)}.py-3{padding-block:calc(var(--spacing) * 3)}.py-3\.5{padding-block:calc(var(--spacing) * 3.5)}.py-4{padding-block:calc(var(--spacing) * 4)}.py-5{padding-block:calc(var(--spacing) * 5)}.py-8{padding-block:calc(var(--spacing) * 8)}.py-10{padding-block:calc(var(--spacing) * 10)}.py-14{padding-block:calc(var(--spacing) * 14)}.py-24{padding-block:calc(var(--spacing) * 24)}.pt-1{padding-top:calc(var(--spacing) * 1)}.pt-2{padding-top:calc(var(--spacing) * 2)}.pt-2\.5{padding-top:calc(var(--spacing) * 2.5)}.pt-3{padding-top:calc(var(--spacing) * 3)}.pt-4{padding-top:calc(var(--spacing) * 4)}.pt-5{padding-top:calc(var(--spacing) * 5)}.pt-7{padding-top:calc(var(--spacing) * 7)}.pb-3\.5{padding-bottom:calc(var(--spacing) * 3.5)}.pb-4{padding-bottom:calc(var(--spacing) * 4)}.pb-6{padding-bottom:calc(var(--spacing) * 6)}.text-center{text-align:center}.text-left{text-align:left}.font-mono{font-family:var(--font-mono)}.text-2xl{font-size:var(--text-2xl);line-height:var(--tw-leading,var(--text-2xl--line-height))}.text-3xl{font-size:var(--text-3xl);line-height:var(--tw-leading,var(--text-3xl--line-height))}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-lg{font-size:var(--text-lg);line-height:var(--tw-leading,var(--text-lg--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xl{font-size:var(--text-xl);line-height:var(--tw-leading,var(--text-xl--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\[9px\]{font-size:9px}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[13px\]{font-size:13px}.leading-5{--tw-leading:calc(var(--spacing) * 5);line-height:calc(var(--spacing) * 5)}.leading-7{--tw-leading:calc(var(--spacing) * 7);line-height:calc(var(--spacing) * 7)}.leading-relaxed{--tw-leading:var(--leading-relaxed);line-height:var(--leading-relaxed)}.leading-snug{--tw-leading:var(--leading-snug);line-height:var(--leading-snug)}.leading-tight{--tw-leading:var(--leading-tight);line-height:var(--leading-tight)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-light{--tw-font-weight:var(--font-weight-light);font-weight:var(--font-weight-light)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.font-semibold{--tw-font-weight:var(--font-weight-semibold);font-weight:var(--font-weight-semibold)}.tracking-\[0\.16em\]{--tw-tracking:.16em;letter-spacing:.16em}.tracking-tight{--tw-tracking:var(--tracking-tight);letter-spacing:var(--tracking-tight)}.tracking-widest{--tw-tracking:var(--tracking-widest);letter-spacing:var(--tracking-widest)}.break-words{overflow-wrap:break-word}.break-all{word-break:break-all}.whitespace-normal{white-space:normal}.whitespace-nowrap{white-space:nowrap}.whitespace-pre-wrap{white-space:pre-wrap}.text-\[\#111\]{color:#111}.text-\[\#333\]{color:#333}.text-\[\#555\]{color:#555}.text-\[var\(--debug-accent\)\]{color:var(--debug-accent)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-white{color:var(--color-white)}.lowercase{text-transform:lowercase}.uppercase{text-transform:uppercase}.italic{font-style:italic}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,)}.underline{text-decoration-line:underline}.decoration-dotted{text-decoration-style:dotted}.underline-offset-4{text-underline-offset:4px}.opacity-0{opacity:0}.opacity-35{opacity:.35}.opacity-100{opacity:1}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-\[0_10px_40px_rgba\(124\,45\,18\,0\.1\)\]{--tw-shadow:0 10px 40px var(--tw-shadow-color,#7c2d121a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-\[0_25px_50px_rgba\(124\,45\,18\,0\.1\)\]{--tw-shadow:0 25px 50px var(--tw-shadow-color,#7c2d121a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px var(--tw-shadow-color,#0000001a), 0 4px 6px -4px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px var(--tw-shadow-color,#0000001a), 0 2px 4px -2px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.ring-2{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.outline{outline-style:var(--tw-outline-style);outline-width:1px}.blur{--tw-blur:blur(8px);filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.backdrop-blur-md{--tw-backdrop-blur:blur(var(--blur-md));-webkit-backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,)}.backdrop-blur-sm{--tw-backdrop-blur:blur(var(--blur-sm));-webkit-backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,)}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-\[stroke-dashoffset\]{transition-property:stroke-dashoffset;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-\[width\]{transition-property:width;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-all{transition-property:all;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-opacity{transition-property:opacity;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-transform{transition-property:transform,translate,scale,rotate;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-150{--tw-duration:.15s;transition-duration:.15s}.duration-1000{--tw-duration:1s;transition-duration:1s}.ease-in-out{--tw-ease:var(--ease-in-out);transition-timing-function:var(--ease-in-out)}.ease-linear{--tw-ease:linear;transition-timing-function:linear}.ease-out{--tw-ease:var(--ease-out);transition-timing-function:var(--ease-out)}.outline-none{--tw-outline-style:none;outline-style:none}.select-none{-webkit-user-select:none;user-select:none}.\[visual\:screenshot\]{visual:screenshot}.group-focus-within\:opacity-100:is(:where(.group):focus-within *){opacity:1}@media (hover:hover){.group-hover\:opacity-100:is(:where(.group):hover *){opacity:1}}.group-focus-visible\:opacity-100:is(:where(.group):focus-visible *){opacity:1}.last\:mb-0:last-child{margin-bottom:calc(var(--spacing) * 0)}.last\:border-r-0:last-child{border-right-style:var(--tw-border-style);border-right-width:0}.last\:border-b-0:last-child{border-bottom-style:var(--tw-border-style);border-bottom-width:0}@media (hover:hover){.hover\:border-\[var\(--debug-accent\)\]\/50:hover{border-color:var(--debug-accent)}@supports (color:color-mix(in lab, red, red)){.hover\:border-\[var\(--debug-accent\)\]\/50:hover{border-color:color-mix(in oklab, var(--debug-accent) 50%, transparent)}}}.focus\:ring-2:focus,.focus-visible\:ring-2:focus-visible{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.focus-visible\:outline-2:focus-visible{outline-style:var(--tw-outline-style);outline-width:2px}.focus-visible\:outline-none:focus-visible{--tw-outline-style:none;outline-style:none}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:.5}@media (width>=40rem){.sm\:col-start-auto{grid-column-start:auto}.sm\:max-h-\[300px\]{max-height:300px}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:grid-cols-\[72px_minmax\(0\,1fr\)_minmax\(0\,1fr\)\]{grid-template-columns:72px minmax(0,1fr) minmax(0,1fr)}.sm\:grid-cols-\[120px_minmax\(0\,1fr\)\]{grid-template-columns:120px minmax(0,1fr)}.sm\:grid-cols-\[minmax\(0\,1fr\)_130px\]{grid-template-columns:minmax(0,1fr) 130px}.sm\:px-8{padding-inline:calc(var(--spacing) * 8)}}@media (width>=48rem){.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (width>=64rem){.lg\:max-h-\[620px\]{max-height:620px}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-\[260px_minmax\(0\,1fr\)\]{grid-template-columns:260px minmax(0,1fr)}.lg\:px-10{padding-inline:calc(var(--spacing) * 10)}}@media (width>=80rem){.xl\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.xl\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}}@media (prefers-color-scheme:dark){.dark\:text-red-400{color:var(--color-red-400)}}}:host([data-bsk-overlay-surface]){z-index:2147483647!important;pointer-events:none!important;width:100vw!important;height:100vh!important;display:block!important;position:fixed!important;inset:0!important}:host([data-bsk-overlay-surface][data-bsk-overlay-blocking]){pointer-events:auto!important}:host([data-bsk-overlay-surface][data-bsk-input-passthrough]),:host([data-bsk-input-passthrough]) [data-slot=control-overlay-blocker],:host([data-bsk-input-passthrough]) [data-slot=control-overlay-pill],:host([data-bsk-input-passthrough]) [data-slot=control-overlay-pill] *{pointer-events:none!important}:host([data-bsk-capture-hidden]){display:none!important}@keyframes spin{to{transform:rotate(360deg)}}</style></head><body><div class="bsk-overlay-root"></div></body></html></template></browser-skill-overlay></html>
