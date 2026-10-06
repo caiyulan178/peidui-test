@@ -372,7 +372,7 @@ body {
   margin-bottom: 6px;
 }
 .ui-col li::before {
-  content: "\\2713";
+  content: "\2713";
   position: absolute;
   left: 0;
   color: #6dd5fa;
@@ -443,6 +443,158 @@ body {
   margin-top: 16px;
   line-height: 1.6;
 }
+
+/* Deep Report (unlocked) */
+.paid-content.unlocked {
+  filter: none;
+  opacity: 1;
+  pointer-events: auto;
+}
+.deep-block {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.deep-block h5 {
+  font-size: 14px;
+  color: #ff6b9d;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.deep-block p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.82);
+}
+.deep-block .advice-item {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.82);
+  margin-bottom: 6px;
+  padding-left: 4px;
+}
+.trend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.trend-week {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  width: 42px;
+  flex-shrink: 0;
+}
+.trend-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.trend-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #ff6b9d, #c44dff);
+}
+.trend-note { font-size: 12px; color: rgba(255,255,255,0.55); width: 60px; text-align: right; flex-shrink:0; }
+.deep-done {
+  text-align: center;
+  font-size: 12px;
+  color: #6dd5fa;
+  margin-top: 4px;
+}
+
+/* Payment Modal */
+.pay-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 100;
+  align-items: flex-end;
+  justify-content: center;
+}
+.pay-modal.show { display: flex; animation: fadeUp 0.25s ease; }
+.pay-card {
+  width: 100%;
+  max-width: 420px;
+  background: #f5f6f7;
+  color: #1a1a1a;
+  border-radius: 16px 16px 0 0;
+  padding: 24px 20px 28px;
+  position: relative;
+}
+.pay-close {
+  position: absolute;
+  top: 16px; right: 18px;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  line-height: 1;
+}
+.pay-title { text-align: center; font-size: 15px; color: #666; margin-bottom: 6px; }
+.pay-amount { text-align: center; font-size: 34px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+.pay-item { text-align: center; font-size: 13px; color: #888; margin-bottom: 18px; }
+.pay-divider { height: 1px; background: #e2e2e2; margin: 0 -20px 8px; }
+.pay-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 4px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+.pay-row.disabled { opacity: 0.5; cursor: default; }
+.pay-icon {
+  width: 26px; height: 26px;
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; margin-right: 12px;
+}
+.pay-icon.wx { background: #07c160; color: #fff; }
+.pay-icon.qq { background: #12b7f5; color: #fff; }
+.pay-label { flex: 1; font-size: 15px; color: #1a1a1a; }
+.pay-check { color: #07c160; font-size: 18px; }
+.pay-tag { font-size: 12px; color: #bbb; }
+.pay-btn {
+  width: 100%;
+  margin-top: 20px;
+  background: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.pay-safe { text-align: center; font-size: 11px; color: #aaa; margin-top: 12px; }
+
+/* Pay Processing */
+.pay-processing {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 120;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.pay-processing.show { display: flex; }
+.pp-spinner {
+  width: 44px; height: 44px;
+  border: 3px solid rgba(255,255,255,0.2);
+  border-top-color: #07c160;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+.pp-text { color: #fff; font-size: 14px; }
 
 /* Animations */
 @keyframes fadeUp {
@@ -602,25 +754,8 @@ body {
     </div>
 
     <div class="paid-section">
-      <div class="paid-content">
-        <div class="paid-block">
-          <h5>冲突高发预警</h5>
-          <p>第2-3个月，你们最可能因为"回复消息的节奏差异"产生第一次冷战。焦虑型的A会在等待中反复确认，而回避型的B需要独处恢复能量...</p>
-        </div>
-        <div class="paid-block">
-          <h5>给A的3条沟通建议</h5>
-          <p>1. 当TA说"让我想想"时，真的给24小时而不是追问；2. 用具体请求代替情绪表达...</p>
-        </div>
-        <div class="paid-block">
-          <h5>给B的3条沟通建议</h5>
-          <p>1. 每天主动发一条消息，哪怕只是一个表情包；2. 独处时告诉TA"我需要充电，不是不想你"...</p>
-        </div>
-        <div class="paid-block">
-          <h5>30天关系走势</h5>
-          <p>第1周甜蜜期，第2周开始出现小摩擦，第3周如果不主动沟通会有第一次"冷战风险点"，第4周...</p>
-        </div>
-      </div>
-      <div class="lock-overlay">
+      <div class="paid-content" id="paidContent"></div>
+      <div class="lock-overlay" id="lockOverlay">
         <div class="lock-icon">&#128274;</div>
         <h3>深度版：再答 18 题解锁</h3>
         <p>30 题完整版 · 含冲突预警 + 双方建议 + 30天走势</p>
@@ -636,6 +771,46 @@ body {
       长按保存图片
     </div>
   </div>
+</div>
+
+<!-- Screen: Deep Quiz (18 questions) -->
+<div class="screen" id="screen-deep">
+  <div class="question-panel">
+    <div class="progress-bar"><div class="progress-fill" id="deepProgress"></div></div>
+    <div class="q-counter" id="deepCounter"></div>
+    <div class="q-dimension" id="deepDim"></div>
+    <div class="q-text" id="deepText"></div>
+    <div class="options" id="deepOptions"></div>
+  </div>
+</div>
+
+<!-- Payment Modal (mock 微信支付) -->
+<div class="pay-modal" id="payModal">
+  <div class="pay-card">
+    <div class="pay-close" onclick="closePayModal()">×</div>
+    <div class="pay-title">确认支付</div>
+    <div class="pay-amount">¥ 19.90</div>
+    <div class="pay-item">性格配对 · 深度版报告（30 题完整版）</div>
+    <div class="pay-divider"></div>
+    <div class="pay-row" onclick="confirmPay()">
+      <span class="pay-icon wx">&#128269;</span>
+      <span class="pay-label">微信支付</span>
+      <span class="pay-check">&#10003;</span>
+    </div>
+    <div class="pay-row disabled">
+      <span class="pay-icon qq">&#128039;</span>
+      <span class="pay-label">QQ 钱包</span>
+      <span class="pay-tag">暂不可用</span>
+    </div>
+    <button class="pay-btn" onclick="confirmPay()">立即支付 ¥19.90</button>
+    <div class="pay-safe">演示环境 · 不会产生真实扣款</div>
+  </div>
+</div>
+
+<!-- Pay Processing overlay -->
+<div class="pay-processing" id="payProcessing">
+  <div class="pp-spinner"></div>
+  <div class="pp-text" id="ppText">正在跳转微信支付...</div>
 </div>
 
 </div>
@@ -673,6 +848,12 @@ const questions = [
 let currentPerson = 0; // 0=A, 1=B
 let currentQ = 0;
 let answers = { A: [], B: [] };
+
+// ===== DEEP STATE =====
+let lastResult = null;        // 缓存快速版结果
+let deepAnswers = { A: [], B: [] };
+let deepPerson = 0;
+let deepQ = 0;
 
 // ===== NAVIGATION =====
 function showScreen(id) {
@@ -950,6 +1131,9 @@ function computeResult() {
   });
   dimArea.innerHTML = html;
 
+  // 缓存结果供深度版复用
+  lastResult = { matchPercent, dimsA, dimsB, attachA, attachB, anxCountA, anxCountB, llA, llB, mbtiA, mbtiB, diffCount, compats, mostDiffAxis, maxDiff, axisNames };
+
   // Radar chart
   drawRadar(dimsA, dimsB);
 }
@@ -975,7 +1159,175 @@ function loveLanguage(x) {
 }
 
 function startDeepQuiz() {
-  alert('深度版（再加 18 题）支付入口\n\n正式版这里会：\n1. 拉起微信支付 ¥19.9\n2. 支付成功 → 解锁 18 道进阶题\n3. 答完出完整深度报告\n\n现在这是占位演示。');
+  document.getElementById('payModal').classList.add('show');
+}
+
+function closePayModal() {
+  document.getElementById('payModal').classList.remove('show');
+}
+
+function confirmPay() {
+  document.getElementById('payModal').classList.remove('show');
+  const pp = document.getElementById('payProcessing');
+  const txt = document.getElementById('ppText');
+  pp.classList.add('show');
+  txt.textContent = '正在跳转微信支付...';
+  setTimeout(() => { txt.textContent = '支付成功 ✓'; }, 1100);
+  setTimeout(() => {
+    pp.classList.remove('show');
+    // 进入深度答题
+    deepAnswers = { A: [], B: [] };
+    deepPerson = 0;
+    deepQ = 0;
+    showScreen('screen-deep');
+    renderDeepQuestion();
+  }, 2000);
+}
+
+// ===== DEEP QUESTIONS (18) =====
+const deepQuestions = [
+  // MBTI 深化 6
+  { dim:'深度 · 能量恢复', text:'连续社交一整天后，你通常需要——', a:'再约人吃饭继续热闹', b:'一整天独处才缓过来' },
+  { dim:'深度 · 表达节奏', text:'讨论问题时你更习惯——', a:'想到就说、边说边想', b:'先在脑子里想清楚再开口' },
+  { dim:'深度 · 信息信任', text:'你更相信哪种结论——', a:'亲身经验验证过的、看得见的数据', b:'逻辑推演和直觉洞察出的规律' },
+  { dim:'深度 · 话题偏好', text:'聊天时你更享受——', a:'聊具体的事：吃啥去哪买了啥', b:'聊抽象的：意义、未来、想法' },
+  { dim:'深度 · 冲突立场', text:'朋友跟你意见不同时，你第一反应——', a:'先分析谁对谁错讲道理', b:'先照顾彼此感受怕伤感情' },
+  { dim:'深度 · 计划弹性', text:'计划被打乱时你会——', a:'烦躁，必须按原计划来', b:'无所谓，随机应变更自在' },
+  // 依恋深化 6
+  { dim:'深度 · 分离焦虑', text:'和 TA 分开几天出差，你会——', a:'频繁想看对方动态、想视频', b:'挺好，享受难得的独处' },
+  { dim:'深度 · 确认需求', text:'你需要 TA 多久说一次"我爱你"——', a:'希望经常、最好每天都有', b:'放在心里就行，不必挂嘴上' },
+  { dim:'深度 · 冷战耐受', text:'吵架后超过一天不说话，你会——', a:'坐不住，必须主动破冰', b:'可以等对方先冷静' },
+  { dim:'深度 · 被忽视反应', text:'觉得被 TA 冷落时，你倾向于——', a:'追问、表达不满、要个说法', b:'缩回自己的壳里、表面没事' },
+  { dim:'深度 · 边界感', text:'你理想中的两人边界是——', a:'尽量融合，什么都一起做', b:'各自有独立空间和朋友圈' },
+  { dim:'深度 · 安全感来源', text:'你的安全感更多来自——', a:'对方的回应和陪伴频率', b:'自己经济和精神上的独立' },
+  // 沟通与冲突 6
+  { dim:'深度 · 沟通偏好', text:'重要的事你更喜欢——', a:'当面或语音，能听到语气', b:'文字，可以斟酌措辞' },
+  { dim:'深度 · 压力表现', text:'压力大时你会——', a:'找人倾诉说出来才舒服', b:'自己消化，不太想讲话' },
+  { dim:'深度 · 道歉方式', text:'你更接受哪种道歉——', a:'明确说"对不起"+解释+承诺', b:'默默对你好、当作翻篇' },
+  { dim:'深度 · 需求表达', text:'想要什么时你通常——', a:'直接说清楚不绕弯', b:'暗示，希望 TA 自己懂' },
+  { dim:'深度 · 情绪传染', text:'TA 情绪低落时你会——', a:'一起低落、被带跑', b:'保持稳定、当 TA 的支柱' },
+  { dim:'深度 · 未来规划', text:'关于两人的未来——', a:'希望早点定下来（同居/结婚）', b:'走一步看一步，不想被绑定' }
+];
+
+function renderDeepQuestion() {
+  const q = deepQuestions[deepQ];
+  const total = deepQuestions.length;
+  document.getElementById('deepProgress').style.width = ((deepQ+1)/total*100)+'%';
+  document.getElementById('deepCounter').innerHTML =
+    '<span style="color:'+(deepPerson===0?'#ff6b9d':'#6dd5fa')+';font-weight:600;">'+
+    (deepPerson===0?'&#128105; 你 · 深度题':'&#128104; TA · 深度题')+'</span> · 第 '+(deepQ+1)+' / '+total+' 题'+
+    (deepQ===total-1?' <span style="color:#c44dff;">（最后一题，马上出报告）</span>':'');
+  document.getElementById('deepDim').textContent = q.dim;
+  document.getElementById('deepText').textContent = q.text;
+  const optArea = document.getElementById('deepOptions');
+  optArea.innerHTML = '';
+  [['a',0],['b',1]].forEach(([k,v])=>{
+    const el=document.createElement('div');
+    el.className='option';
+    el.textContent=q[k];
+    el.onclick=()=>selectDeepAnswer(v);
+    optArea.appendChild(el);
+  });
+}
+
+function selectDeepAnswer(val) {
+  const key = deepPerson===0?'A':'B';
+  deepAnswers[key].push(val);
+  deepQ++;
+  if (deepQ < deepQuestions.length) {
+    renderDeepQuestion();
+  } else {
+    if (deepPerson===0) {
+      deepPerson=1; deepQ=0;
+      renderDeepQuestion();
+    } else {
+      showScreen('screen-computing');
+      document.querySelector('#screen-computing h3').textContent='正在生成你们的深度报告...';
+      setTimeout(computeDeepReport, 1800);
+    }
+  }
+}
+
+function computeDeepReport() {
+  const r = lastResult;
+  const da = deepAnswers.A, db = deepAnswers.B;
+
+  // 用深度题微调亲密需求/沟通维度：焦虑信号计数
+  const anxDeepA = da.slice(6,12).filter(v=>v===0).length; // 依恋6题里选 a 越多越焦虑
+  const anxDeepB = db.slice(6,12).filter(v=>v===0).length;
+  const anxTotalA = r.anxCountA + anxDeepA;   // 0-9
+  const anxTotalB = r.anxCountB + anxDeepB;
+  const anxGap = Math.abs(anxTotalA - anxTotalB);
+  const anxiousOne = anxTotalA > anxTotalB ? '你' : 'TA';
+  const avoidantOne = anxTotalA > anxTotalB ? 'TA' : '你';
+
+  // 沟通偏好差异（题12-17）
+  const commMismatch = da.slice(12,18).filter((v,i)=>v!==db.slice(12,18)[i]).length;
+
+  // 冲突预警
+  const conflictWeek = anxGap>=4 ? '第2-3周' : anxGap>=2 ? '第3-4周' : '第1-2个月';
+  const conflictScene = r.mostDiffAxis==='亲密需求' || anxGap>=3
+    ? '回复消息的节奏差' : r.mostDiffAxis==='外向度' ? '周末怎么过的安排分歧' : r.mostDiffAxis==='灵活度' ? '临时改计划的容忍度' : '表达关心的方式错位';
+  const conflictText = `${conflictWeek}，你们最可能因为「${conflictScene}」爆发第一次冷战。${anxiousOne}会在等待里反复确认、越想越不安，而${avoidantOne}需要退回去独处回血——一个越追越急，一个越被追越想逃，这是把小摩擦拖成大问题的经典回路。`;
+
+  // 给焦虑方 / 回避方的建议（按谁更焦虑）
+  const adviceAnxious = [
+    `当${avoidantOne}说"我想静静"时，那是 TA 的充电方式，不是不爱你——把追问换成一句"好，你需要我的时候我在"。`,
+    `别用"翻旧账/连环消息"表达不安，直接说需求：把"你怎么又不理我"改成"今晚能陪我聊十分钟吗"。`,
+    `给自己找一个不依赖 TA 的情绪出口（朋友/运动/爱好），你的不安会明显下降。`
+  ];
+  const adviceAvoidant = [
+    `每天主动给一个"信号"，哪怕只是一个表情包，${anxiousOne}要的不是时长，是"被记得"的确定感。`,
+    `需要独处时先报备再消失："我今晚想自己待会儿，明早找你"，给个归期，TA 就不会慌。`,
+    `${anxiousOne}情绪上来时，先接住感受再讲道理，一句"我知道你难受"比十句解释有用。`
+  ];
+  const adviceA = anxTotalA>=anxTotalB ? adviceAnxious : adviceAvoidant;
+  const adviceB = anxTotalA>=anxTotalB ? adviceAvoidant : adviceAnxious;
+
+  // 30 天走势（基于匹配度 + 焦虑差 + 沟通错位）
+  const base = r.matchPercent;
+  const w1 = Math.min(98, base+8);
+  const w2 = Math.max(40, base - anxGap*2);
+  const w3 = Math.max(38, base - anxGap*2 - commMismatch*2 + 3);
+  const w4 = Math.min(97, base + (anxGap<=2?6:-2));
+  const trend = [
+    {w:'第1周', v:w1, note:'甜蜜高峰'},
+    {w:'第2周', v:w2, note:anxGap>=3?'摩擦初现':'平稳'},
+    {w:'第3周', v:w3, note:commMismatch>=3?'沟通考验':'磨合'},
+    {w:'第4周', v:w4, note:w4>=base?'回暖上升':'需主动'}
+  ];
+  const trendText = w4>=base
+    ? '你们整体是"高开→小回调→稳步回暖"的健康曲线，只要第3周那次沟通考验不回避，第4周会进入更踏实的舒适期。'
+    : '你们需要警惕第4周的"平淡期提前"——建议在第3周主动安排一次深谈或新鲜约会，把走势拉回来。';
+
+  // 渲染
+  const pc = document.getElementById('paidContent');
+  pc.innerHTML = `
+    <div class="deep-block">
+      <h5>&#9888;&#65039; 冲突高发预警</h5>
+      <p>${conflictText}</p>
+    </div>
+    <div class="deep-block">
+      <h5>&#128105; 给你的 3 条沟通建议</h5>
+      ${adviceA.map((s,i)=>`<div class="advice-item">${i+1}. ${s}</div>`).join('')}
+    </div>
+    <div class="deep-block">
+      <h5>&#128104; 给 TA 的 3 条沟通建议</h5>
+      ${adviceB.map((s,i)=>`<div class="advice-item">${i+1}. ${s}</div>`).join('')}
+    </div>
+    <div class="deep-block">
+      <h5>&#128200; 30 天关系走势</h5>
+      ${trend.map(t=>`<div class="trend-row"><span class="trend-week">${t.w}</span><div class="trend-bar"><div class="trend-fill" style="width:${t.v}%"></div></div><span class="trend-note">${t.note}</span></div>`).join('')}
+      <p style="margin-top:10px">${trendText}</p>
+    </div>
+    <div class="deep-done">&#10003; 深度版报告已生成 · 30 题完整版</div>
+  `;
+  pc.classList.add('unlocked');
+  document.getElementById('lockOverlay').style.display = 'none';
+
+  // 回到结果页并滚动到深度报告
+  showScreen('screen-result');
+  setTimeout(() => { pc.scrollIntoView({behavior:'smooth', block:'center'}); }, 300);
 }
 
 // ===== RADAR CHART =====
